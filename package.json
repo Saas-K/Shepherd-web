@@ -15,6 +15,7 @@
     "lodash": "^4.17.15",
     "moment": "2.26.0",
     "node-sass": "^7.0.3",
+    "query-string": "^6.12.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.1.2",
