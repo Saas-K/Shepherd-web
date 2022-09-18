@@ -1,0 +1,1 @@
+export const CALENDAR_DAYS_GET = '/calendar';

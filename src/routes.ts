@@ -1,4 +1,4 @@
-import Page from "./components/Comp1/Page";
+import ClassesCalendar from './components/Calendar/ClassesCalendar';
 
 const routes: Array<{
   path: string;
@@ -6,9 +6,9 @@ const routes: Array<{
   component: () => JSX.Element;
 }> = [
   {
-    path: '/images',
-    name: 'images',
-    component: Page
+    path: '/calendar',
+    name: 'calendar',
+    component: ClassesCalendar
   }
 ];
 

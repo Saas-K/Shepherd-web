@@ -22,9 +22,9 @@ function IconContainer({ src, title, hasChildren }: { src: any; title?: string; 
 export default function Sidebar() {
   const [menuItems, setMenuItemsState] = useState<any[]>([
     {
-      key: 'image',
-      path: '/images',
-      title: 'Images',
+      key: 'calendar',
+      path: '/calendar',
+      title: 'Calendar',
       icon: <MessageOutlined/>
     },
     {
