@@ -28,19 +28,17 @@ export default function ClassesCalendar() {
 
   useEffect(() => {
     const now: Date = new Date();
-    fetchData(now.getFullYear(), now.getMonth() + 1);
+    fetchData(now.getFullYear(), now.getMonth() + 1, true);
   }, []);
 
-  const fetchData = (year: number, month: number) => {
-    console.log(year);
-    console.log(month);
+  const fetchData = (year: number, month: number, init: boolean) => {
     service
-    .getDays(year, month)
+    .getDays(year, month, init)
     .then((data: any) => {
       const initYearMonth: string = _getYearMonth(year, month);
       setEvents((prev: any) => ({
           ...prev,
-          [initYearMonth]: data
+          ...data
       }));
       setCurrentMonth(initYearMonth);
     })
@@ -87,7 +85,7 @@ export default function ClassesCalendar() {
     console.log(currentMonth);
     console.log(value.format('YYYY-MM'));
     if (currentMonth !== value.format('YYYY-MM')) {
-      fetchData(value.year(), value.month() + 1);
+      fetchData(value.year(), value.month() + 1, false);
     }
     setSelectedDate(value.format('YYYY-MM-DD'));
     setIsEventEditVisible(true);

@@ -3,11 +3,8 @@ import queryString from 'query-string';
 
 function _getAuthHeader() {
   return {
-    // headers: {
-    //   'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-    // }
     headers: {
-      'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0Iiwicm9sZXMiOlsiVVNFUiJdLCJpc3MiOiJTSEVQSEVSRCIsImV4cCI6MTY2MzYwMzc0MX0.I6Z0WKoB7B7BvVK-JYAUhbIHZEneFbJTgpE8KfTaMKOZPLobzSrrX8MnC133kc1QBvFbeUcW_tph0yhW3A60Pw`
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
     }
   };
 }
