@@ -22,33 +22,45 @@ function IconContainer({ src, title, hasChildren }: { src: any; title?: string; 
 export default function Sidebar() {
   const [menuItems, setMenuItemsState] = useState<any[]>([
     {
-      key: 'calendar',
-      path: '/calendar',
-      title: 'Calendar',
-      icon: <MessageOutlined/>
-    },
-    {
-      key: 'merchant',
+      key: 'course',
       path: '#',
-      title: 'Merchant',
+      title: 'Course',
       icon: <MoneyCollectOutlined/>,
       children: [
         {
-          key: 'merchant.list',
-          path: '/merchants',
-          title: 'Merchant',
-        },
-        {
-          key: 'merchant.collection',
-          path: '/collections',
-          title: 'Collection',
-        },
-        {
-          key: 'merchant.howToEarn',
-          path: '/howToEarn',
-          title: 'How To Earn',
-        },
+          key: 'courses',
+          path: '/courses',
+          title: 'Courses',
+        }
       ],
+    },
+    {
+      key: 'time',
+      path: '#',
+      title: 'Time',
+      icon: <MoneyCollectOutlined/>,
+      children: [
+        {
+          key: 'calendar',
+          path: '/calendar',
+          title: 'Calendar',
+        },
+        {
+          key: 'schedule',
+          path: '/schedule',
+          title: 'Schedule',
+        }
+      ],
+    },
+    {
+      key: 'enrollment',
+      path: '/enrollment',
+      title: 'Enrollment',
+    },
+    {
+      key: 'payment',
+      path: '/payment',
+      title: 'Payment',
     }
   ]);
 

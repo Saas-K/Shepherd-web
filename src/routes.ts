@@ -1,4 +1,6 @@
-import ClassesCalendar from './components/Calendar/ClassesCalendar';
+import ClassCalendar from './components/Calendar/ClassCalendar';
+import ClassSchedule from './components/Calendar/ClassSchedule';
+
 
 const routes: Array<{
   path: string;
@@ -8,7 +10,12 @@ const routes: Array<{
   {
     path: '/calendar',
     name: 'calendar',
-    component: ClassesCalendar
+    component: ClassCalendar
+  },
+  {
+    path: '/schedule',
+    name: 'schedule',
+    component: ClassSchedule
   }
 ];
 

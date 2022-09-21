@@ -10,3 +10,12 @@ export interface IDayClassInfo {
   date?: string,
   active: boolean
 }
+
+export interface IMainDay {
+  id: string,
+  courseId: string,
+  courseName: string,
+  weekDay: number,
+  begin: string,
+  end: string
+}

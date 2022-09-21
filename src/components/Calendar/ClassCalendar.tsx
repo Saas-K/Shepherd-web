@@ -10,7 +10,7 @@ import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
 import { getWeekDayName } from '../../utils/DateTimeUtils';
 
-export default function ClassesCalendar() {
+export default function ClassCalendar() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
@@ -82,10 +82,8 @@ export default function ClassesCalendar() {
   };
 
   const _handleSelectDate = (value: Moment) => {
-    console.log(currentMonth);
-    console.log(value.format('YYYY-MM'));
     if (currentMonth !== value.format('YYYY-MM')) {
-      fetchData(value.year(), value.month() + 1, false);
+      fetchData(value.year(), value.month() + 1, true);
     }
     setSelectedDate(value.format('YYYY-MM-DD'));
     setIsEventEditVisible(true);
