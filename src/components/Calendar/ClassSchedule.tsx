@@ -16,24 +16,19 @@ import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
 import { getWeekDatesFormatted } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../common/ComponentLoading';
+import { colorsList } from '../../utils/Colors';
 
 export default function ClassSchedule() {
   const todayStr: string = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
   const weekDates: string[] = getWeekDatesFormatted(new Date());
+  const colors: string[] = colorsList;
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const [events, setEvents] = useState<any>({});
-  /**
-   * '2022-09': {
-   *    '2022-09-09': [
-   *        IDayClassInfo
-   *    ]
-   * }
-   */
+  const [colorMap, setColorMap] = useState<Map<string, string | undefined>>(new Map());
 
   useEffect(() => {
     fetchData();
@@ -44,12 +39,20 @@ export default function ClassSchedule() {
     .getMainDays()
     .then(async (data: IMainDay[]) => {
       const _classes: IFullCalendarEvent[] = [];
+      const _colorMap: Map<string, string | undefined> = colorMap;
+      let colorIndex = 0;
       for (const _class of data) {
+        if (!_colorMap.has(_class.courseId)) {
+          _colorMap.set(_class.courseId, colorsList.at(colorIndex));
+          colorIndex++;
+        }
+
         _classes.push({
           id: _class.id,
           title: _class.courseName,
           start: getDate(_class.weekDay, _class.begin),
           end: getDate(_class.weekDay, _class.end),
+          backgroundColor: _colorMap.get(_class.courseId),
           extendedProps: {
             courseId: _class.courseId,
             courseName: _class.courseName,
@@ -60,6 +63,7 @@ export default function ClassSchedule() {
         });
       }
       setClasses([..._classes]);
+      setColorMap({..._colorMap});
     })
     .catch(error => {
       message.error(error.message);

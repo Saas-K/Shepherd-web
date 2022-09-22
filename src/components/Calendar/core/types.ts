@@ -25,6 +25,8 @@ export interface IFullCalendarEvent {
   title?: string,
   start?: string,
   end?: string,
+  textColor?: 'white',
+  backgroundColor?: string,
   extendedProps?: IClassMeta
 }
 
