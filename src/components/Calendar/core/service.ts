@@ -8,5 +8,5 @@ export async function getDays(year: number, month: number, init: boolean): Promi
 }
 
 export async function getMainDays(): Promise<any> {
-  return client().get(CALENDAR_DAYS_GET);
+  return client().get(`${CALENDAR_DAYS_GET}/main-day`);
 }
