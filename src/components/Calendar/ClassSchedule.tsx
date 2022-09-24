@@ -86,8 +86,7 @@ export default function ClassSchedule() {
     })
     .catch(error => {
       message.error(error.message);
-    })
-    .finally(() => {setLoading(false)});
+    });
   }
 
   const getDate = (weekDay: number | undefined, timeAt: string | undefined): string => {
@@ -168,8 +167,8 @@ export default function ClassSchedule() {
 
   return (
     <>
-    {loading && classes.length > 0 ? (<ComponentLoading/>) : (
-      <>
+    {console.log(classes.length)}
+    {loading ? (<ComponentLoading/>) : (
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
@@ -182,7 +181,6 @@ export default function ClassSchedule() {
         editable
         selectable
         selectMirror
-        dayMaxEvents
         weekends
         firstDay={1}
         // initialEvents={} // alternatively, use the `events` setting to fetch from a feed
@@ -206,6 +204,7 @@ export default function ClassSchedule() {
         initialEvents={classes}
         eventContent={_renderClasses}
       />
+    )}
       <Modal 
         visible={isEventEditVisible}
         width='50%'
@@ -216,8 +215,6 @@ export default function ClassSchedule() {
       >
         {_renderCreateInput()}
       </Modal>
-      </>
-    )}
     </>
   );
 }
