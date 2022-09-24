@@ -12,12 +12,13 @@ export interface IDayClassInfo {
 }
 
 export interface IMainDay {
-  id: string,
-  courseId: string,
-  courseName: string,
-  weekDay: number,
-  begin: string,
-  end: string
+  id?: string,
+  courseId?: string,
+  courseName?: string,
+  weekDay?: number,
+  begin?: string,
+  end?: string
+  active?: true
 }
 
 export interface IFullCalendarEvent {
@@ -36,4 +37,13 @@ interface IClassMeta {
   weekDay?: number,
   begin?: string,
   end?: string
+}
+
+export interface IClassSlot {
+  courseId?: string,
+  weekDay?: number,
+  start?: Date,
+  end?: Date,
+  startStr: string,
+  endStr: string
 }

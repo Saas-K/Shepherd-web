@@ -1,90 +1,149 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { Calendar, Modal, Button, Col, Form, Input, message, Descriptions } from 'antd';
+import { Calendar, Modal, Button, Col, Form, Input, message, TimePicker, Select } from 'antd';
 // import type { Moment } from 'moment';
 // import moment from 'moment';
 // import ComponentLoading from '../common/ComponentLoading';
 
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate } from '@fullcalendar/react'
+import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate, ViewApi } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import moment from 'moment';
 
-import { IMainDay, IFullCalendarEvent } from './core/types';
+import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
-import { getWeekDatesFormatted } from '../../utils/DateTimeUtils';
+import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
+import { ICourse, IPageResponse } from '../common/core/types';
+
+const { RangePicker } = TimePicker;
 
 export default function ClassSchedule() {
-  const todayStr: string = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
   const weekDates: string[] = getWeekDatesFormatted(new Date());
-  const colors: string[] = colorsList;
-
+  
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
   const [colorMap, setColorMap] = useState<Map<string, string | undefined>>(new Map());
+  const [mainDayClass, setMainDayClass] = useState<IMainDay>();
+  const [courses, setCourses] = useState<ICourse[]>([]);
 
   useEffect(() => {
     fetchData();
+    fetchAllCourses();
   }, []);
 
   const fetchData = () => {
     service
     .getMainDays()
-    .then(async (data: IMainDay[]) => {
+    .then((data: IMainDay[]) => {
       const _classes: IFullCalendarEvent[] = [];
-      const _colorMap: Map<string, string | undefined> = colorMap;
-      let colorIndex = 0;
+      // let colorIndex = 0;
       for (const _class of data) {
-        if (!_colorMap.has(_class.courseId)) {
-          _colorMap.set(_class.courseId, colorsList.at(colorIndex));
-          colorIndex++;
-        }
+        // if (_class.courseId && !colorMap.has(_class.courseId)) {
+        //   colorMap.set(_class.courseId, colorsList.at(colorIndex));
+        //   colorIndex++;
+        // }
 
-        _classes.push({
-          id: _class.id,
-          title: _class.courseName,
-          start: getDate(_class.weekDay, _class.begin),
-          end: getDate(_class.weekDay, _class.end),
-          backgroundColor: _colorMap.get(_class.courseId),
-          extendedProps: {
-            courseId: _class.courseId,
-            courseName: _class.courseName,
-            weekDay: _class.weekDay,
-            begin: _class.begin,
-            end: _class.end
-          }
-        });
+        _classes.push(toFullCalendarEvent(_class));
       }
       setClasses([..._classes]);
-      setColorMap({..._colorMap});
+      // setColorMap({...colorMap});
     })
     .catch(error => {
       message.error(error.message);
     })
-    .finally(() => {setLoading(false)})
+    .finally(() => {setLoading(false)});
   }
 
-  const getDate = (weekDay: number, timeAt: string): string => {
-    return `${weekDates.at(weekDay - 1)}T${timeAt}`;
+  const toFullCalendarEvent = (_class: IMainDay): IFullCalendarEvent => {
+    return {
+      id: _class.id,
+      title: _class.courseName,
+      start: getDate(_class.weekDay, _class.begin),
+      end: getDate(_class.weekDay, _class.end),
+      backgroundColor: 'blue',
+      extendedProps: {
+        courseId: _class.courseId,
+        courseName: _class.courseName,
+        weekDay: _class.weekDay,
+        begin: _class.begin,
+        end: _class.end
+      }
+    };
   }
 
-  const  handleDateSelect = (selectInfo: DateSelectArg) => {
-    console.log(selectInfo);
+  const fetchAllCourses = () => {
+    service
+    .getAllCourses()
+    .then((data: IPageResponse<ICourse>) => {
+      setCourses(data.list);
+    })
+    .catch(error => {
+      message.error(error.message);
+    })
+    .finally(() => {setLoading(false)});
   }
 
-  const  handleEventClick = (clickInfo: EventClickArg) => {
-    console.log(clickInfo);
+  const getDate = (weekDay: number | undefined, timeAt: string | undefined): string => {
+    return weekDay && timeAt ? `${weekDates.at(weekDay - 1)}T${timeAt}` : '';
+  }
+
+  const handleDateSelect = (slotInfo: DateSelectArg) => {
+    setSelectedSlot({
+      weekDay: slotInfo.start.getDay() + 1,
+      start: slotInfo.start,
+      end: slotInfo.end,
+      startStr: getFullCalendarTime(slotInfo.startStr),
+      endStr: getFullCalendarTime(slotInfo.endStr)
+    });
+    setIsEventEditVisible(true);
+  }
+
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    const _event: EventApi = clickInfo.event;
+
+    setSelectedSlot({
+      startStr: getFullCalendarTime(_event.startStr),
+      endStr: getFullCalendarTime(_event.endStr)
+    });
+  }
+
+  const handleChangeCourseSelect = () => (value: string) => {
+    setSelectedSlot((prev: any) => ({
+      ...prev,
+      'courseId': value
+    }));
+  }
+
+  const handleCreate = () => {
+    service.createMainDay({
+      courseId: selectedSlot?.courseId || courses.at(0)?.id,
+      weekDay: selectedSlot?.weekDay,
+      begin: `${selectedSlot?.startStr}:00`,
+      end: `${selectedSlot?.endStr}:00`,
+      active: true
+    })
+    .then((data: IMainDay) => {
+      setLoading(true);
+      setClasses([...classes, toFullCalendarEvent(data)]);
+      console.log(classes)
+    })
+    .catch(error => {
+      message.error(error.message);
+    })
+    .finally(() => {
+      setIsEventEditVisible(false);
+      setLoading(false);
+    });
   }
 
   const _renderClasses = (classContent: EventContentArg) => {
-    console.log(classContent.event)
     return (
       <>
         <b>{`${omitTimeSeconds(classContent.event.extendedProps.begin)}-${omitTimeSeconds(classContent.event.extendedProps.end)}`}</b>
@@ -93,45 +152,71 @@ export default function ClassSchedule() {
     );
   }
 
+  const _renderCreateInput = () => {
+    return (
+      <>
+        <div>{getWeekDayName(selectedSlot?.weekDay)}</div>
+        <div>{`${selectedSlot?.startStr} - ${selectedSlot?.endStr}`}</div>
+        <Select style={{ width: 120 }} onChange={handleChangeCourseSelect()}>
+          {courses.map((course: ICourse) => (
+            <Select.Option key={course.id} value={course.id}>{course.name}</Select.Option>
+          ))}
+        </Select>
+      </>
+    );
+  }
+
   return (
     <>
-    {console.log(classes)}
-    {loading ? (<ComponentLoading/>) : (
+    {loading && classes.length > 0 ? (<ComponentLoading/>) : (
+      <>
       <FullCalendar
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-      headerToolbar={{
-        left: undefined,
-        center: undefined,
-        right: undefined
-      }}
-      initialView='timeGridWeek'
-      editable
-      selectable
-      selectMirror
-      dayMaxEvents
-      weekends
-      firstDay={1}
-      // initialEvents={} // alternatively, use the `events` setting to fetch from a feed
-      select={handleDateSelect}
-      // eventContent={renderEventContent} // custom render function
-      eventClick={handleEventClick}
-      // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-      /* you can update a remote database when these fire:
-      eventAdd={function(){}}
-      eventChange={function(){}}
-      eventRemove={function(){}}
-      */
-      allDaySlot={false}
-      dayHeaderContent={(args) => {
-      return moment(args.date).format('ddd')
-      }}
-      slotDuration='00:15:00'
-      slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
-      slotMinTime='06:00:00'
-      slotMaxTime='22:00:00'
-      initialEvents={classes}
-      eventContent={_renderClasses}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: undefined,
+          center: undefined,
+          right: undefined
+        }}
+        initialView='timeGridWeek'
+        eventStartEditable={false}
+        editable
+        selectable
+        selectMirror
+        dayMaxEvents
+        weekends
+        firstDay={1}
+        // initialEvents={} // alternatively, use the `events` setting to fetch from a feed
+        select={handleDateSelect}
+        eventClick={handleEventClick}
+        // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+        /* you can update a remote database when these fire:
+        eventAdd={function(){}}
+        eventChange={function(){}}
+        eventRemove={function(){}}
+        */
+        eventAdd={() => {console.log('added')}}
+        allDaySlot={false}
+        dayHeaderContent={(args) => {
+        return moment(args.date).format('ddd')
+        }}
+        slotDuration='00:15:00'
+        slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
+        slotMinTime='06:00:00'
+        slotMaxTime='22:00:00'
+        initialEvents={classes}
+        eventContent={_renderClasses}
       />
+      <Modal 
+        visible={isEventEditVisible}
+        width='50%'
+        confirmLoading={loading}
+        okText='create'
+        onCancel={() => {setIsEventEditVisible(false)}}
+        onOk={handleCreate}
+      >
+        {_renderCreateInput()}
+      </Modal>
+      </>
     )}
     </>
   );
