@@ -19,8 +19,6 @@ import ComponentLoading from '../common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
 import { ICourse, IPageResponse } from '../common/core/types';
 
-const { RangePicker } = TimePicker;
-
 export default function ClassSchedule() {
   const weekDates: string[] = getWeekDatesFormatted(new Date());
   
