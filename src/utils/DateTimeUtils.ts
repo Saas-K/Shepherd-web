@@ -37,3 +37,8 @@ export function getFullCalendarTime(now: string | undefined): string {
   if (now === undefined) return '';
   return now.substring(11, 16);
 }
+
+export function getWeekDayNow(now: Date | undefined | null): number {
+  if (!now) return -1;
+  return now.getDay() === 0 ? 7 : now.getDay();
+}
