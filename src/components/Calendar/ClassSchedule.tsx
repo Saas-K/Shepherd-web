@@ -15,7 +15,7 @@ import { LabeledValue } from 'antd/lib/select';
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
-import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName } from '../../utils/DateTimeUtils';
+import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
 import { ICourse, IPageResponse } from '../common/core/types';
@@ -116,11 +116,12 @@ export default function ClassSchedule() {
   }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
+    console.log('wow');
     const _event: EventApi = clickInfo.event;
     setSelectedSlot({
       id: _event.id,
       courseId: _event.extendedProps.courseId,
-      weekDay: _event.start?.getDay(),
+      weekDay: getWeekDayNow(_event?.start),
       startStr: getFullCalendarTime(_event.startStr),
       endStr: getFullCalendarTime(_event.endStr)
     });
@@ -143,7 +144,7 @@ export default function ClassSchedule() {
     }));
   }
 
-  const handleCreate = () => {
+  const handleEditSubmit = () => {
     service.createMainDay({
       id: selectedSlot?.id || undefined,
       courseId: selectedSlot?.courseId || courses.at(0)?.id,
@@ -173,6 +174,35 @@ export default function ClassSchedule() {
     .finally(() => {
       setSelectedSlot(undefined);
       setIsEventEditVisible(false);
+      setLoading(false);
+    });
+  }
+
+  const handleClassInfoChange = (changeInfo: any) => {
+    const _event: EventApi = changeInfo.event;
+    service.createMainDay({
+      id: _event?.id || undefined,
+      courseId: _event?.extendedProps?.courseId || courses.at(0)?.id,
+      weekDay: getWeekDayNow(_event?.start),
+      begin: `${getFullCalendarTime(_event?.startStr)}:00`,
+      end: `${getFullCalendarTime(_event?.endStr)}:00`,
+      active: true
+    })
+    .then((data: IMainDay) => {
+      setLoading(true);
+      data.courseName = getCourseNameById(data.courseId || '');
+      for (let i = 0; i < classes.length; i++) {
+        if (classes[i].id === data.id) {
+          classes[i] = toFullCalendarEvent(data);
+        }
+      }
+      setClasses([...classes]);
+    })
+    .catch(error => {
+      message.error(error.message);
+    })
+    .finally(() => {
+      setSelectedSlot(undefined);
       setLoading(false);
     });
   }
@@ -211,7 +241,7 @@ export default function ClassSchedule() {
           right: undefined
         }}
         initialView='timeGridWeek'
-        eventStartEditable={false}
+        eventStartEditable
         editable
         selectable
         selectMirror
@@ -223,9 +253,11 @@ export default function ClassSchedule() {
         // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
         /* you can update a remote database when these fire:
         eventAdd={function(){}}
-        eventChange={function(){}}
+        // eventChange={function(){}}
         eventRemove={function(){}}
         */
+        // eventsSet={() => console.log('shit')}
+        eventChange={handleClassInfoChange}
         eventAdd={() => {console.log('added')}}
         allDaySlot={false}
         dayHeaderContent={(args) => {
@@ -248,7 +280,7 @@ export default function ClassSchedule() {
         confirmLoading={loading}
         okText={editMode}
         onCancel={() => {setIsEventEditVisible(false); setSelectedSlot(undefined);}}
-        onOk={handleCreate}
+        onOk={handleEditSubmit}
       >
         {_renderCreateInput()}
       </Modal>
