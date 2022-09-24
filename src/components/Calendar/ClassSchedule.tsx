@@ -22,7 +22,6 @@ import { ICourse, IPageResponse } from '../common/core/types';
 export default function ClassSchedule() {
   const weekDates: string[] = getWeekDatesFormatted(new Date());
   
-  const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
@@ -147,7 +146,7 @@ export default function ClassSchedule() {
   const _renderClasses = (classContent: EventContentArg) => {
     return (
       <>
-        <b>{`${omitTimeSeconds(classContent.event.extendedProps.begin)}-${omitTimeSeconds(classContent.event.extendedProps.end)}`}</b>
+        <b>{`${omitTimeSeconds(classContent.event.extendedProps.begin)} - ${omitTimeSeconds(classContent.event.extendedProps.end)}`}</b>
         <div>{classContent.event.title}</div>
       </>
     );
