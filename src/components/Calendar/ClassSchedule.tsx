@@ -95,7 +95,7 @@ export default function ClassSchedule() {
 
   const handleDateSelect = (slotInfo: DateSelectArg) => {
     setSelectedSlot({
-      weekDay: slotInfo.start.getDay() + 1,
+      weekDay: slotInfo.start.getDay(),
       start: slotInfo.start,
       end: slotInfo.end,
       startStr: getFullCalendarTime(slotInfo.startStr),
@@ -130,8 +130,12 @@ export default function ClassSchedule() {
     })
     .then((data: IMainDay) => {
       setLoading(true);
+      for (const _class of classes) {
+        if (data.courseId === _class.extendedProps?.courseId) {
+          data.courseName = _class.extendedProps?.courseName;
+        }
+      }
       setClasses([...classes, toFullCalendarEvent(data)]);
-      console.log(classes)
     })
     .catch(error => {
       message.error(error.message);
