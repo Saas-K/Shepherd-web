@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ConfigProvider } from 'antd';
+import EN_GB from 'antd/lib/locale-provider/en_GB';
+import moment from 'moment';
+import 'moment/locale/en-gb';  // important!
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+moment.locale('en-gb');
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ConfigProvider locale={EN_GB}>
+      <App />
+    </ConfigProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
