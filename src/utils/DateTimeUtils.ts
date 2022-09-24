@@ -30,3 +30,8 @@ export function getWeekDatesFormatted(today: Date): string[] {
   }
   return week; 
 }
+
+export function getFullCalendarTime(now: string | undefined): string {
+  if (now === undefined) return '';
+  return now.substring(11, 16);
+}
