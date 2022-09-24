@@ -40,6 +40,7 @@ interface IClassMeta {
 }
 
 export interface IClassSlot {
+  id?: string,
   courseId?: string,
   weekDay?: number,
   start?: Date,

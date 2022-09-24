@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import moment from 'moment';
+import { LabeledValue } from 'antd/lib/select';
 
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
@@ -21,6 +22,8 @@ import { ICourse, IPageResponse } from '../common/core/types';
 
 export default function ClassSchedule() {
   const weekDates: string[] = getWeekDatesFormatted(new Date());
+  const CREATE = 'Create';
+  const UPDATE = 'Update';
   
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
@@ -29,6 +32,7 @@ export default function ClassSchedule() {
   const [colorMap, setColorMap] = useState<Map<string, string | undefined>>(new Map());
   const [mainDayClass, setMainDayClass] = useState<IMainDay>();
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [editMode, setEditMode] = useState<string>(CREATE);
 
   useEffect(() => {
     fetchData();
@@ -98,27 +102,50 @@ export default function ClassSchedule() {
       startStr: getFullCalendarTime(slotInfo.startStr),
       endStr: getFullCalendarTime(slotInfo.endStr)
     });
+    setEditMode(CREATE);
     setIsEventEditVisible(true);
+  }
+
+  const getCourseNameById = (id: string): string => {
+    for (const course of courses) {
+      if (id === course?.id) {
+        return course?.name || '';
+      }
+    }
+    return '';
   }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const _event: EventApi = clickInfo.event;
-
     setSelectedSlot({
+      id: _event.id,
+      courseId: _event.extendedProps.courseId,
+      weekDay: _event.start?.getDay(),
       startStr: getFullCalendarTime(_event.startStr),
       endStr: getFullCalendarTime(_event.endStr)
     });
+    setEditMode(UPDATE);
+    setIsEventEditVisible(true);
   }
 
-  const handleChangeCourseSelect = () => (value: string) => {
+  const getDefaultOptionValue = (): { value: string; label: string } => {
+    const _courseId = selectedSlot?.courseId || classes.at(0)?.extendedProps?.courseId || '';
+    return {
+      value: _courseId,
+      label: getCourseNameById(_courseId)
+    };
+  }
+
+  const handleChangeCourseSelect = () => (value: { value: string; label: React.ReactNode }) => {
     setSelectedSlot((prev: any) => ({
       ...prev,
-      'courseId': value
+      'courseId': value.value
     }));
   }
 
   const handleCreate = () => {
     service.createMainDay({
+      id: selectedSlot?.id || undefined,
       courseId: selectedSlot?.courseId || courses.at(0)?.id,
       weekDay: selectedSlot?.weekDay,
       begin: `${selectedSlot?.startStr}:00`,
@@ -127,17 +154,24 @@ export default function ClassSchedule() {
     })
     .then((data: IMainDay) => {
       setLoading(true);
-      for (const _class of classes) {
-        if (data.courseId === _class.extendedProps?.courseId) {
-          data.courseName = _class.extendedProps?.courseName;
+      data.courseName = getCourseNameById(data.courseId || '');
+
+      if (editMode === CREATE) {
+        setClasses([...classes, toFullCalendarEvent(data)]);
+      } else {
+        for (let i = 0; i < classes.length; i++) {
+          if (classes[i].id === data.id) {
+            classes[i] = toFullCalendarEvent(data);
+          }
         }
+        setClasses([...classes]);
       }
-      setClasses([...classes, toFullCalendarEvent(data)]);
     })
     .catch(error => {
       message.error(error.message);
     })
     .finally(() => {
+      setSelectedSlot(undefined);
       setIsEventEditVisible(false);
       setLoading(false);
     });
@@ -157,9 +191,9 @@ export default function ClassSchedule() {
       <>
         <div>{getWeekDayName(selectedSlot?.weekDay)}</div>
         <div>{`${selectedSlot?.startStr} - ${selectedSlot?.endStr}`}</div>
-        <Select style={{ width: 120 }} onChange={handleChangeCourseSelect()}>
+        <Select style={{ width: 500 }} onChange={handleChangeCourseSelect()} labelInValue value={getDefaultOptionValue()}>
           {courses.map((course: ICourse) => (
-            <Select.Option key={course.id} value={course.id}>{course.name}</Select.Option>
+            <Select.Option key={course.id} value={course.id} label={course.name}>{course.name}</Select.Option>
           ))}
         </Select>
       </>
@@ -168,7 +202,6 @@ export default function ClassSchedule() {
 
   return (
     <>
-    {console.log(classes.length)}
     {loading ? (<ComponentLoading/>) : (
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -204,14 +237,17 @@ export default function ClassSchedule() {
         slotMaxTime='22:00:00'
         initialEvents={classes}
         eventContent={_renderClasses}
+        forceEventDuration
+        defaultTimedEventDuration='00:30:00'
       />
     )}
+    {console.log(weekDates)}
       <Modal 
         visible={isEventEditVisible}
         width='50%'
         confirmLoading={loading}
-        okText='create'
-        onCancel={() => {setIsEventEditVisible(false)}}
+        okText={editMode}
+        onCancel={() => {setIsEventEditVisible(false); setSelectedSlot(undefined);}}
         onOk={handleCreate}
       >
         {_renderCreateInput()}
