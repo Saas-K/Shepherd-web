@@ -248,11 +248,13 @@ export default function ClassSchedule() {
               <Select.Option key={course.id} value={course.id} label={course.name}>{course.name}</Select.Option>
             ))}
           </Select>
-          <Collapse>
+          {editMode === UPDATE ? (
+            <Collapse>
             <Collapse.Panel header="Advanced" key="1">
               <Button onClick={handleDelete} danger>Delete</Button>
             </Collapse.Panel>
           </Collapse>
+          ) : undefined}
         </Space>
       </>
     );
