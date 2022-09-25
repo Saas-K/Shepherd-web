@@ -1,8 +1,9 @@
 import { numberPadLeft } from './StringUtils';
 
+const weekDayNames: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 export function getWeekDayName(weekDay: number | undefined): string {
   if (weekDay === undefined) return '';
-  const weekDayNames: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   return weekDayNames[weekDay - 1];
 }
 
@@ -41,4 +42,12 @@ export function getFullCalendarTime(now: string | undefined): string {
 export function getWeekDayNow(now: Date | undefined | null): number {
   if (!now) return -1;
   return now.getDay() === 0 ? 7 : now.getDay();
+}
+
+export function getYearMonth(year: number, month: number): string {
+  return `${year}-${numberPadLeft(month)}`;
+}
+
+export function getDate(weekDates: string[], weekDay: number | undefined, timeAt: string | undefined): string {
+  return weekDay && timeAt ? `${weekDates.at(weekDay - 1)}T${timeAt}` : '';
 }
