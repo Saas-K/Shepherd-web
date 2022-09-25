@@ -6,7 +6,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import moment from 'moment';
-import { LabeledValue } from 'antd/lib/select';
 
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
@@ -277,30 +276,22 @@ export default function ClassSchedule() {
         selectMirror
         weekends
         firstDay={1}
-        // initialEvents={} // alternatively, use the `events` setting to fetch from a feed
-        select={handleDateSelect}
-        eventClick={handleEventClick}
-        // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-        /* you can update a remote database when these fire:
-        eventAdd={function(){}}
-        // eventChange={function(){}}
-        eventRemove={function(){}}
-        */
-        // eventsSet={() => console.log('shit')}
-        eventChange={handleClassInfoChange}
-        eventAdd={() => {console.log('added')}}
         allDaySlot={false}
-        dayHeaderContent={(args) => {
-        return moment(args.date).format('ddd')
-        }}
         slotDuration='00:15:00'
         slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
         slotMinTime='06:00:00'
         slotMaxTime='22:00:00'
-        initialEvents={classes}
-        eventContent={_renderClasses}
         forceEventDuration
         defaultTimedEventDuration='00:30:00'
+        dayHeaderContent={(args) => {
+          return moment(args.date).format('ddd')
+        }}
+
+        eventContent={_renderClasses}
+        initialEvents={classes}
+        select={handleDateSelect}
+        eventClick={handleEventClick}
+        eventChange={handleClassInfoChange}
       />
     )}
       <Modal 
