@@ -16,6 +16,10 @@ export async function createMainDay(body: IMainDay): Promise<any> {
   return client().post(`${CALENDAR_MAIN_DAYS}`, undefined, body);
 }
 
+export async function deleteMainDay(id: string): Promise<any> {
+  return client().deletef(`${CALENDAR_MAIN_DAYS}`, {id});
+}
+
 export async function getAllCourses(): Promise<any> {
   return client().get(`${COURSES_GET}`, {page: 0, limit: -1});
 }

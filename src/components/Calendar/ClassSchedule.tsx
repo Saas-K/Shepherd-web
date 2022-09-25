@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { Calendar, Modal, Button, Col, Form, Input, message, TimePicker, Select } from 'antd';
-// import type { Moment } from 'moment';
-// import moment from 'moment';
-// import ComponentLoading from '../common/ComponentLoading';
-
+import { Modal, message, Select, Collapse, Button, Row, Space } from 'antd';
 import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate, ViewApi } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -116,7 +112,6 @@ export default function ClassSchedule() {
   }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    console.log('wow');
     const _event: EventApi = clickInfo.event;
     setSelectedSlot({
       id: _event.id,
@@ -207,6 +202,32 @@ export default function ClassSchedule() {
     });
   }
 
+  const handleDelete = () => {
+    if (selectedSlot?.id) {
+      service
+      .deleteMainDay(selectedSlot.id)
+      .then(() => {
+        setLoading(true);
+        const _classes: IFullCalendarEvent[] = [...classes];
+        for (let i = 0; i < _classes.length; i++) {
+          if (_classes.at(i)?.id === selectedSlot.id) {
+            _classes.splice(i, 1);
+            setClasses([..._classes]);
+            break;
+          }
+        }
+      })
+      .catch(error => {
+        message.error(error.message);
+      })
+      .finally(() => {
+        setSelectedSlot(undefined);
+        setIsEventEditVisible(false);
+        setLoading(false);
+      });
+    }
+  }
+
   const _renderClasses = (classContent: EventContentArg) => {
     return (
       <>
@@ -219,13 +240,20 @@ export default function ClassSchedule() {
   const _renderCreateInput = () => {
     return (
       <>
-        <div>{getWeekDayName(selectedSlot?.weekDay)}</div>
-        <div>{`${selectedSlot?.startStr} - ${selectedSlot?.endStr}`}</div>
-        <Select style={{ width: 500 }} onChange={handleChangeCourseSelect()} labelInValue value={getDefaultOptionValue()}>
-          {courses.map((course: ICourse) => (
-            <Select.Option key={course.id} value={course.id} label={course.name}>{course.name}</Select.Option>
-          ))}
-        </Select>
+        <Space direction='vertical' style={{ display: 'flex' }}>
+          <div>{getWeekDayName(selectedSlot?.weekDay)}</div>
+          <div>{`${selectedSlot?.startStr} - ${selectedSlot?.endStr}`}</div>
+          <Select style={{ width: '50%' }} onChange={handleChangeCourseSelect()} labelInValue value={getDefaultOptionValue()}>
+            {courses.map((course: ICourse) => (
+              <Select.Option key={course.id} value={course.id} label={course.name}>{course.name}</Select.Option>
+            ))}
+          </Select>
+          <Collapse>
+            <Collapse.Panel header="Advanced" key="1">
+              <Button onClick={handleDelete} danger>Delete</Button>
+            </Collapse.Panel>
+          </Collapse>
+        </Space>
       </>
     );
   }
@@ -273,7 +301,6 @@ export default function ClassSchedule() {
         defaultTimedEventDuration='00:30:00'
       />
     )}
-    {console.log(weekDates)}
       <Modal 
         visible={isEventEditVisible}
         width='50%'
