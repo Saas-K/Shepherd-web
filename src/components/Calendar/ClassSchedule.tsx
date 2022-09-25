@@ -10,7 +10,7 @@ import moment from 'moment';
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
-import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow } from '../../utils/DateTimeUtils';
+import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow, getDate } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
 import { ICourse, IPageResponse } from '../common/core/types';
@@ -61,8 +61,8 @@ export default function ClassSchedule() {
     return {
       id: _class.id,
       title: _class.courseName,
-      start: getDate(_class.weekDay, _class.begin),
-      end: getDate(_class.weekDay, _class.end),
+      start: getDate(weekDates, _class.weekDay, _class.begin),
+      end: getDate(weekDates, _class.weekDay, _class.end),
       backgroundColor: 'blue',
       extendedProps: {
         courseId: _class.courseId,
@@ -83,10 +83,6 @@ export default function ClassSchedule() {
     .catch(error => {
       message.error(error.message);
     });
-  }
-
-  const getDate = (weekDay: number | undefined, timeAt: string | undefined): string => {
-    return weekDay && timeAt ? `${weekDates.at(weekDay - 1)}T${timeAt}` : '';
   }
 
   const handleDateSelect = (slotInfo: DateSelectArg) => {
