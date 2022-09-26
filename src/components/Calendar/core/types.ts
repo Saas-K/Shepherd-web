@@ -1,14 +1,14 @@
 export interface IDayClassInfo {
-  id: string,
-  courseId: string,
-  courseName: string,
-  weekDay: number,
-  begin: string,
-  end: string,
-  mainDayClassId: string,
+  id?: string,
+  courseId?: string,
+  courseName?: string,
+  weekDay?: number,
+  begin?: string,
+  end?: string,
+  mainDayClassId?: string,
   mainDayClassDate?: string,
   date?: string,
-  active: boolean
+  active?: boolean
 }
 
 export interface IMainDay {
@@ -31,7 +31,7 @@ export interface IFullCalendarEvent {
   extendedProps?: IClassMeta
 }
 
-interface IClassMeta {
+export interface IClassMeta {
   courseId?: string,
   courseName?: string,
   weekDay?: number,
