@@ -39,6 +39,12 @@ export function getFullCalendarTime(now: string | undefined): string {
   return now.substring(11, 16);
 }
 
+export function getFullCalendarDate(now: string | undefined): string {
+  console.log(now);
+  if (now === undefined) return '';
+  return now.substring(0, 10);
+}
+
 export function getWeekDayNow(now: Date | undefined | null): number {
   if (!now) return -1;
   return now.getDay() === 0 ? 7 : now.getDay();
@@ -50,4 +56,20 @@ export function getYearMonth(year: number, month: number): string {
 
 export function getDate(weekDates: string[], weekDay: number | undefined, timeAt: string | undefined): string {
   return weekDay && timeAt ? `${weekDates.at(weekDay - 1)}T${timeAt}` : '';
+}
+
+/**
+ * 
+ * @param date 'yyyy-mm-dd' | 'yyyy-mm'
+ * @returns [yyyy, mm, dd]
+ */
+export function parseNumberYearMonthDate(date: string | undefined): number[] | null {
+  if (!date) return null;
+
+  const parts: string[] = date.split('-');
+  const partsNumber: number = parts.length;
+  if (partsNumber === 2) {
+    return [+parts[0], +parts[1]];
+  }
+  return [+parts[0], +parts[1], +parts[2]];
 }
