@@ -232,7 +232,7 @@ export default function ClassSchedule() {
     );
   }
 
-  const _renderCreateInput = () => {
+  const _renderEditInput = () => {
     return (
       <>
         <Space direction='vertical' style={{ display: 'flex' }}>
@@ -298,7 +298,7 @@ export default function ClassSchedule() {
         onCancel={() => {setIsEventEditVisible(false); setSelectedSlot(undefined);}}
         onOk={handleEditSubmit}
       >
-        {_renderCreateInput()}
+        {_renderEditInput()}
       </Modal>
     </>
   );
