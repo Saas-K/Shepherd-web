@@ -4,8 +4,8 @@ import {
 } from '../../../services/apis';
 import { IMainDay, IDayClassInfo } from "./types";
 
-export async function getDays(year: number, month: number, init: boolean): Promise<any> {
-  return client().get(CALENDAR_DAYS_GET, {year, month, init});
+export async function getDays(beginYear: number, beginMonth: number, endYear: number, endMonth: number): Promise<any> {
+  return client().get(CALENDAR_DAYS_GET, {beginYear, beginMonth, endYear, endMonth});
 }
 
 export async function getMainDays(): Promise<any> {

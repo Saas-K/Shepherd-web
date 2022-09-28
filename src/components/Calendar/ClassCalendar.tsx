@@ -12,7 +12,18 @@ import ComponentLoading from '../common/ComponentLoading';
 import { IDayClassInfo, IFullCalendarEvent, IClassSlot, IClassMeta } from './core/types';
 import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
-import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow, getYearMonth, parseNumberYearMonthDate, getFullCalendarDate } from '../../utils/DateTimeUtils';
+import { 
+  getWeekDatesFormatted, 
+  getFullCalendarTime, 
+  getWeekDayName, 
+  getWeekDayNow, 
+  getYearMonth, 
+  parseNumberYearMonthDate, 
+  getFullCalendarDate,
+  getPrevYearMonth,
+  getNextYearMonth,
+  compareYearMonth
+} from '../../utils/DateTimeUtils';
 
 export default function ClassCalendar() {
   const calendarRef: any = useRef(null);
@@ -46,24 +57,26 @@ export default function ClassCalendar() {
 
   useEffect(() => {
     const now: Date = new Date();
-    fetchData(now.getFullYear(), now.getMonth() + 1, true);
+    setCurrentMonth(`${now.getFullYear}-${now.getMonth}`);
+
+    const prevYearMonthParts: number[] = getPrevYearMonth(now);
+    const nextYearMonthParts: number[] = getNextYearMonth(now);
+
+    fetchData(prevYearMonthParts[0], prevYearMonthParts[1], nextYearMonthParts[0], nextYearMonthParts[1]);
   }, []);
 
   useEffect(() => {
     populateClasses();
   }, [datesInfo]);
 
-  const fetchData = (year: number, month: number, init: boolean) => {
+  const fetchData = (beginYear: number, beginMonth: number, endYear: number, endMonth: number) => {
     service
-    .getDays(year, month, init)
+    .getDays(beginYear, beginMonth, endYear, endMonth)
     .then((data: any) => {
-      const initYearMonth: string = getYearMonth(year, month);
       setDatesInfo((prev: any) => ({
           ...prev,
           ...data
       }));
-      setCurrentMonth(initYearMonth);
-      
     })
     .catch(error => {
       message.error(error.message);
@@ -162,7 +175,7 @@ export default function ClassCalendar() {
         if (dateParts) {
           const mainDateParts: number[] | null = parseNumberYearMonthDate(pendingAlt.mainDayClassDate);
           // const threeMonthsFetch: boolean = !!mainDateParts && mainDateParts[1] !== dateParts[1];
-          fetchData(dateParts[0], dateParts[1], true);
+          fetchData(2022, 9, 2022, 10);
         }
       })
       .catch(error => {
@@ -177,12 +190,53 @@ export default function ClassCalendar() {
     }
   }
 
-  const _renderClasses = (classContent: EventContentArg) => {
+  const handleDateChange = (dateInfo: any) => {
+    const now: Date = new Date();
+    const _curViewStart: Date = dateInfo.start;
+    const _curViewEnd: Date = dateInfo.end;
+
+    const _checkStart = compareYearMonth(now, _curViewStart);
+    const _checkEnd = compareYearMonth(now, _curViewEnd);
+    let _side = 0; // -1, 0, 1
+    if (_checkStart === 1) {
+      _side = 1;
+    } else if (_checkEnd === -1) {
+      _side = -1;
+    } else return;
+
+    let _reqBeginYear = 0;
+    let _reqBeginMonth = 0;
+    let _reqEndYear = 0;
+    let _reqEndMonth = 0;
+    if (_curViewStart.getMonth() !== _curViewEnd.getMonth()) {
+      _reqBeginYear = _curViewStart.getFullYear();
+      _reqBeginMonth = _curViewStart.getMonth() + 1;
+      _reqEndYear = _curViewEnd.getFullYear();
+      _reqEndMonth = _curViewEnd.getMonth() + 1;
+    } else if (_side === -1) {
+      const [_reqBeginYear, _reqBeginMonth] = getPrevYearMonth(_curViewStart);
+      _reqEndYear = _curViewEnd.getFullYear();
+      _reqEndMonth = _curViewEnd.getMonth() + 1;
+    } else if (_side === 1) {
+      const [_reqEndYear, _reqEndMonth] = getNextYearMonth(_curViewEnd);
+      _reqBeginYear = _curViewStart.getFullYear();
+      _reqBeginMonth = _curViewStart.getMonth() + 1;
+    }
+
+    const _validReqs = _reqBeginYear * _reqBeginMonth * _reqEndYear * _reqEndMonth !== 0;
+    if (_validReqs 
+      && (!datesInfo[getYearMonth(_reqBeginYear, _reqBeginMonth)] || !datesInfo[getYearMonth(_reqEndYear, _reqEndMonth)])) {
+      fetchData(_reqBeginYear, _reqBeginMonth, _reqEndYear, _reqEndMonth);
+    }
+  }
+
+  const _renderClasses = (classContent: EventContentArg) => {  
     return (
       <>
         {classContent.event.extendedProps.mainDayClassDate ? (<div>ALT</div>) : undefined}
         <b>{`${omitTimeSeconds(classContent.event.extendedProps.begin)} - ${omitTimeSeconds(classContent.event.extendedProps.end)}`}</b>
         <div>{classContent.event.title}</div>
+        <div hidden>{classContent.event.id}</div>
       </>
     );
   }
@@ -236,6 +290,7 @@ export default function ClassCalendar() {
           // eventClick={this.handleEventClick}
           // eventsSet={this.handleEvents}
           eventChange={handleClassInfoChange}
+          datesSet={handleDateChange}
         />
       )}
       <Modal 
