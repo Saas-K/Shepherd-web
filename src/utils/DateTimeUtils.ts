@@ -73,3 +73,48 @@ export function parseNumberYearMonthDate(date: string | undefined): number[] | n
   }
   return [+parts[0], +parts[1], +parts[2]];
 }
+
+export function getPrevYearMonth(date: Date): number[] {
+  const _year = date.getFullYear();
+  const _month = date.getMonth() + 1;
+
+  if (_month === 1) {
+    return [_year - 1, 12];
+  }
+  return [_year, _month - 1];
+}
+
+export function getNextYearMonth(date: Date): number[] {
+  const _year = date.getFullYear();
+  const _month = date.getMonth() + 1;
+
+  if (_month === 12) {
+    return [_year + 1, 1];
+  }
+  return [_year, _month + 1];
+}
+
+export function compareYearMonth(date1: Date, date2: Date): number {
+  const _date1Year = date1.getFullYear();
+  const _date1Month = date1.getMonth() + 1;
+  const _date2Year = date2.getFullYear();
+  const _date2Month = date2.getMonth() + 1;
+
+  const _yearCmp = _date1Year - _date2Year;
+  const _monthCmp = _date1Month - _date2Month;
+
+  if (_yearCmp > 0) {
+    return 1;
+  }
+  if (_yearCmp < 0) {
+    return -1;
+  }
+
+  if (_monthCmp > 0) {
+    return 1;
+  }
+  if (_monthCmp < 0) {
+    return -1;
+  }
+  return 0;
+}
