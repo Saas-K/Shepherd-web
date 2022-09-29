@@ -22,7 +22,8 @@ import {
   getFullCalendarDate,
   getPrevYearMonth,
   getNextYearMonth,
-  compareYearMonth
+  compareYearMonth,
+  compareYearMonthStr
 } from '../../utils/DateTimeUtils';
 
 export default function ClassCalendar() {
@@ -173,9 +174,17 @@ export default function ClassCalendar() {
         setLoading(true);
         dateParts = parseNumberYearMonthDate(pendingAlt.date);
         if (dateParts) {
-          const mainDateParts: number[] | null = parseNumberYearMonthDate(pendingAlt.mainDayClassDate);
-          // const threeMonthsFetch: boolean = !!mainDateParts && mainDateParts[1] !== dateParts[1];
-          fetchData(2022, 9, 2022, 10);
+          const _originalClassParts: number[] | null = parseNumberYearMonthDate(originalClass?.date);
+          const _pendingAltClassParts: number[] | null = parseNumberYearMonthDate(pendingAlt.date);
+
+          if (_originalClassParts && _pendingAltClassParts) {
+            const dateChangeCompare: number = compareYearMonthStr(originalClass?.date, pendingAlt.date);
+            if (dateChangeCompare === 1) {
+              fetchData(_originalClassParts[0], _originalClassParts[1], _pendingAltClassParts[0], _pendingAltClassParts[1]);
+            } else if (dateChangeCompare === -1) {
+              fetchData(_pendingAltClassParts[0], _pendingAltClassParts[1], _originalClassParts[0], _originalClassParts[1]);
+            }
+          }
         }
       })
       .catch(error => {

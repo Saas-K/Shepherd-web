@@ -118,3 +118,33 @@ export function compareYearMonth(date1: Date, date2: Date): number {
   }
   return 0;
 }
+
+export function compareYearMonthStr(date1: string | undefined, date2: string | undefined): number {
+  if (!date1 || !date2) return 0;
+  const _date1Parts: number[] | null = parseNumberYearMonthDate(date1);
+  const _date2Parts: number[] | null = parseNumberYearMonthDate(date2);
+
+  if (!_date1Parts || !_date2Parts) return 0;
+  const _date1Year = _date1Parts[0];
+  const _date1Month = _date1Parts[1];
+  const _date2Year = _date2Parts[0];;
+  const _date2Month = _date2Parts[1];
+
+  const _yearCmp = _date1Year - _date2Year;
+  const _monthCmp = _date1Month - _date2Month;
+
+  if (_yearCmp > 0) {
+    return 1;
+  }
+  if (_yearCmp < 0) {
+    return -1;
+  }
+
+  if (_monthCmp > 0) {
+    return 1;
+  }
+  if (_monthCmp < 0) {
+    return -1;
+  }
+  return 0;
+}
