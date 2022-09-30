@@ -296,6 +296,10 @@ export default function ClassCalendar() {
     }
   }
 
+  const handleDragClass = (dropLocation: any, draggedClass: any) => {
+    return draggedClass.extendedProps.active;
+  }
+
   const _renderClassStatus = (classContentEvent: EventApi): JSX.Element | undefined => {
     const _hasMainClassDate: boolean = classContentEvent.extendedProps.mainDayClassDate;
     
@@ -312,7 +316,11 @@ export default function ClassCalendar() {
     return undefined;
   }
 
-  const _renderClasses = (classContent: EventContentArg) => {  
+  const _renderClasses = (classContent: EventContentArg) => {
+    if (!classContent.event.extendedProps.active) {
+      classContent.isDragging = false;
+    }
+
     return (
       <>
         {_renderClassStatus(classContent.event)}
@@ -364,6 +372,7 @@ export default function ClassCalendar() {
           eventClick={handleEventClick}
           eventChange={handleClassInfoChange}
           datesSet={handleDateChange}
+          eventAllow={handleDragClass}
         />
       )}
       <Modal 
