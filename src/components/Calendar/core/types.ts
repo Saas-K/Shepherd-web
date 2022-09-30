@@ -52,3 +52,10 @@ export interface IClassSlot {
   startStr: string,
   endStr: string
 }
+
+export interface IToggleCancelClass {
+  mainDayClassId?: string,
+  mainDayClassDate?: string | null | undefined,
+  altDayClassId?: string | null,
+  canceled?: boolean
+}

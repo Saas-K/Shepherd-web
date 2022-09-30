@@ -28,13 +28,10 @@ import {
 
 export default function ClassCalendar() {
   const calendarRef: any = useRef(null);
-  const weekDates: string[] = getWeekDatesFormatted(new Date());
   const UPDATE = 'Update';
   
-  const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
-  const [selectedDate, setSelectedDate] = useState<string>('');
   const [datesInfo, setDatesInfo] = useState<any>({});
   /**
    * '2022-09': {
@@ -45,8 +42,8 @@ export default function ClassCalendar() {
    */
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedClass, setSelectedClass] = useState<IDayClassInfo>();
-  const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
   const [currentMonth, setCurrentMonth] = useState<string>('');
+  const [viewDate, setViewDate] = useState<Date[]>(); // [start, end]
   const [originalClass, setOriginalClass] = useState<IDayClassInfo>();
   const [pendingAlt, setPendingAlt] = useState<IDayClassInfo>();
 
@@ -83,6 +80,7 @@ export default function ClassCalendar() {
       message.error(error.message);
     })
     .finally(async () => {
+
       setLoading(false);
     })
   }
@@ -167,22 +165,23 @@ export default function ClassCalendar() {
   }
 
   const handleAltSubmit = () => {
-    let dateParts: number[] | null;
+    let _pendingAltClassParts: number[] | null;
     if (pendingAlt) {
       service.createAltDay(pendingAlt)
       .then((data: any) => {
         setLoading(true);
-        dateParts = parseNumberYearMonthDate(pendingAlt.date);
-        if (dateParts) {
+        _pendingAltClassParts = parseNumberYearMonthDate(pendingAlt.date);
+        if (_pendingAltClassParts) {
           const _originalClassParts: number[] | null = parseNumberYearMonthDate(originalClass?.date);
-          const _pendingAltClassParts: number[] | null = parseNumberYearMonthDate(pendingAlt.date);
 
           if (_originalClassParts && _pendingAltClassParts) {
             const dateChangeCompare: number = compareYearMonthStr(originalClass?.date, pendingAlt.date);
             if (dateChangeCompare === 1) {
-              fetchData(_originalClassParts[0], _originalClassParts[1], _pendingAltClassParts[0], _pendingAltClassParts[1]);
-            } else if (dateChangeCompare === -1) {
               fetchData(_pendingAltClassParts[0], _pendingAltClassParts[1], _originalClassParts[0], _originalClassParts[1]);
+            } else if (dateChangeCompare === -1) {
+              fetchData(_originalClassParts[0], _originalClassParts[1], _pendingAltClassParts[0], _pendingAltClassParts[1]);
+            } else if (viewDate) {
+              fetchData(viewDate[0].getFullYear(), viewDate[0].getMonth() + 1, viewDate[1].getFullYear(), viewDate[1].getMonth() + 1);
             }
           }
         }
@@ -191,7 +190,6 @@ export default function ClassCalendar() {
         message.error(error.message);
       })
       .finally(async () => {
-        setSelectedSlot(undefined);
         setPendingAlt(undefined);
         setIsEventEditVisible(false);
         setLoading(false);
@@ -200,6 +198,8 @@ export default function ClassCalendar() {
   }
 
   const handleDateChange = (dateInfo: any) => {
+    setViewDate([...[dateInfo.start, dateInfo.end]]);
+
     const now: Date = new Date();
     const _curViewStart: Date = dateInfo.start;
     const _curViewEnd: Date = dateInfo.end;
@@ -239,10 +239,83 @@ export default function ClassCalendar() {
     }
   }
 
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    const _event: EventApi = clickInfo.event;
+    setSelectedClass({
+      id: _event.id,
+      courseId: _event.extendedProps.courseId,
+      courseName: _event.extendedProps.courseName,
+      weekDay: _event.extendedProps.weekDay,
+      begin: _event.extendedProps.begin,
+      end: _event.extendedProps.end,
+      mainDayClassId: _event.extendedProps.mainDayClassId,
+      mainDayClassDate: _event.extendedProps.mainDayClassDate,
+      date: _event.extendedProps.date,
+      active: _event.extendedProps.active
+    });
+    setIsEventEditVisible(true);
+  }
+
+  const handleToggleCancelSubmit = () => {
+    console.log(selectedClass);
+    if (selectedClass) {
+      const _parsedId = selectedClass.id?.split('-')[3];
+      service.toggleCancelClass({
+        mainDayClassId: selectedClass?.mainDayClassDate ? selectedClass.mainDayClassId : _parsedId,
+        mainDayClassDate: selectedClass?.mainDayClassDate || selectedClass?.date,
+        altDayClassId: selectedClass?.mainDayClassDate && selectedClass.id ? _parsedId : null,
+        canceled: selectedClass?.active
+      })
+      .then((data: any) => {
+        setLoading(true);
+        const _mainClassParts: number[] | null = parseNumberYearMonthDate(selectedClass?.mainDayClassDate);
+        const _altClassParts: number[] | null = parseNumberYearMonthDate(selectedClass?.date);
+
+        if (_mainClassParts && _altClassParts) {
+          const dateChangeCompare: number = compareYearMonthStr(selectedClass.date, selectedClass.mainDayClassDate);
+          if (dateChangeCompare === 1) {
+            fetchData(_mainClassParts[0], _mainClassParts[1], _altClassParts[0], _altClassParts[1]);
+          } else if (dateChangeCompare === -1) {
+            fetchData(_altClassParts[0], _altClassParts[1], _mainClassParts[0], _mainClassParts[1]);
+          } else if (viewDate) {
+            fetchData(viewDate[0].getFullYear(), viewDate[0].getMonth() + 1, viewDate[1].getFullYear(), viewDate[1].getMonth() + 1);
+          }
+        } else if (viewDate) {
+          fetchData(viewDate[0].getFullYear(), viewDate[0].getMonth() + 1, viewDate[1].getFullYear(), viewDate[1].getMonth() + 1);
+        }
+      })
+      .catch(error => {
+        message.error(error.message);
+      })
+      .finally(async () => {
+        setPendingAlt(undefined);
+        setSelectedClass(undefined);
+        setIsEventEditVisible(false);
+        setLoading(false);
+      });
+    }
+  }
+
+  const _renderClassStatus = (classContentEvent: EventApi): JSX.Element | undefined => {
+    const _hasMainClassDate: boolean = classContentEvent.extendedProps.mainDayClassDate;
+    
+    if (_hasMainClassDate) {
+      if (!classContentEvent.extendedProps.active) {
+        return (
+          <div>CANCELED</div>
+        );
+      }
+      return (
+        <div>ALT</div>
+      );
+    }
+    return undefined;
+  }
+
   const _renderClasses = (classContent: EventContentArg) => {  
     return (
       <>
-        {classContent.event.extendedProps.mainDayClassDate ? (<div>ALT</div>) : undefined}
+        {_renderClassStatus(classContent.event)}
         <b>{`${omitTimeSeconds(classContent.event.extendedProps.begin)} - ${omitTimeSeconds(classContent.event.extendedProps.end)}`}</b>
         <div>{classContent.event.title}</div>
         <div hidden>{classContent.event.id}</div>
@@ -258,13 +331,6 @@ export default function ClassCalendar() {
           <div>{pendingAlt?.courseName}</div>
           <div>{`${getWeekDayName(originalClass?.weekDay)} -> ${getWeekDayName(pendingAlt?.weekDay)}`}</div>
           <div>{`${originalClass?.begin} - ${originalClass?.end} -> ${pendingAlt?.begin} - ${pendingAlt?.end}`}</div>
-          {/* {editMode === UPDATE ? (
-            <Collapse>
-            <Collapse.Panel header="Advanced" key="1">
-              <Button onClick={handleDelete} danger>Delete</Button>
-            </Collapse.Panel>
-          </Collapse>
-          ) : undefined} */}
         </Space>
       </>
     );
@@ -295,9 +361,7 @@ export default function ClassCalendar() {
 
           eventContent={_renderClasses}
           events={classes}
-          // select={this.handleDateSelect}
-          // eventClick={this.handleEventClick}
-          // eventsSet={this.handleEvents}
+          eventClick={handleEventClick}
           eventChange={handleClassInfoChange}
           datesSet={handleDateChange}
         />
@@ -306,10 +370,13 @@ export default function ClassCalendar() {
         visible={isEventEditVisible}
         width='50%'
         confirmLoading={loading}
-        okText={pendingAlt ? 'Confirm': UPDATE}
-        onOk={pendingAlt ? handleAltSubmit : undefined}
+        okText={pendingAlt ? 'Confirm': (selectedClass?.active ? 'Call off' : 'Undo Call off')}
+        onOk={pendingAlt ? handleAltSubmit : handleToggleCancelSubmit}
         cancelText='Cancel'
-        onCancel={() => {setIsEventEditVisible(false); setSelectedSlot(undefined); setPendingAlt(undefined)}}
+        onCancel={() => {
+          setIsEventEditVisible(false); 
+          setPendingAlt(undefined)
+        }}
       >
         {pendingAlt ? _renderEditInput() : undefined}
       </Modal>
