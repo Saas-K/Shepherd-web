@@ -23,16 +23,23 @@ export default function Sidebar() {
   const [menuItems, setMenuItemsState] = useState<any[]>([
     {
       key: 'course',
-      path: '#',
-      title: 'Course',
-      icon: <MoneyCollectOutlined/>,
-      children: [
-        {
-          key: 'courses',
-          path: '/courses',
-          title: 'Courses',
-        }
-      ],
+      path: '/course',
+      title: 'Courses',
+    },
+    {
+      key: 'student',
+      path: '/student',
+      title: 'Students',
+    },
+    {
+      key: 'enrollment',
+      path: '/enrollment',
+      title: 'Enrollments',
+    },
+    {
+      key: 'payment',
+      path: '/payment',
+      title: 'Payments',
     },
     {
       key: 'time',
@@ -52,16 +59,6 @@ export default function Sidebar() {
         }
       ],
     },
-    {
-      key: 'enrollment',
-      path: '/enrollment',
-      title: 'Enrollment',
-    },
-    {
-      key: 'payment',
-      path: '/payment',
-      title: 'Payment',
-    }
   ]);
 
   const [collapsed, setCollapsed] = useState<boolean>(false);

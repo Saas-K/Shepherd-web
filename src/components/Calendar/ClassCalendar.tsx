@@ -7,7 +7,7 @@ import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, 
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import ComponentLoading from '../common/ComponentLoading';
+import ComponentLoading from '../_common/ComponentLoading';
 
 import { IDayClassInfo, IFullCalendarEvent, IClassSlot, IClassMeta } from './core/types';
 import * as service from './core/service';

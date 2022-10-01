@@ -5,8 +5,10 @@ import './Tailwind.css';
 import React, { ReactElement } from 'react';
 import { Layout, Skeleton } from 'antd';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Header from './components/common/Header';
-import Sidebar from './components/common/Sidebar';
+// import Header from './components/_common/Header';
+// import Sidebar from './components/_common/Sidebar';
+import Header from './components/_common/Header';
+import Sidebar from './components/_common/Sidebar';
 import routes from './routes';
 
 const { Content, Footer } = Layout;

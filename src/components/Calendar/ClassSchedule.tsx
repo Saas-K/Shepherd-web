@@ -11,9 +11,9 @@ import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
 import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow, getDate } from '../../utils/DateTimeUtils';
-import ComponentLoading from '../common/ComponentLoading';
+import ComponentLoading from '../_common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
-import { ICourse, IPageResponse } from '../common/core/types';
+import { ICourse, IPageResponse } from '../_common/core/types';
 
 export default function ClassSchedule() {
   const weekDates: string[] = getWeekDatesFormatted(new Date());
