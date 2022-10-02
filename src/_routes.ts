@@ -2,7 +2,8 @@ import ClassCalendar from './components/Calendar/ClassCalendar';
 import ClassSchedule from './components/Calendar/ClassSchedule';
 import CourseList from './components/Course/CourseList';
 import CourseViewEdit from './components/Course/CourseViewEdit';
-
+import StudentList from './components/Student/StudentList';
+import StudentViewEdit from './components/Student/StudentViewEdit';
 
 const routes: Array<{
   path: string;
@@ -29,6 +30,27 @@ const routes: Array<{
     path: '/course/:id/update',
     name: 'Courses',
     component: CourseViewEdit
+  },
+  // student
+  {
+    path: '/student',
+    name: 'Students',
+    component: StudentList
+  },
+  {
+    path: '/student/new',
+    name: 'Students',
+    component: StudentViewEdit
+  },
+  {
+    path: '/student/:id',
+    name: 'Students',
+    component: StudentViewEdit
+  },
+  {
+    path: '/student/:id/update',
+    name: 'Students',
+    component: StudentViewEdit
   },
   // time
   {
