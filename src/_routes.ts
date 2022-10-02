@@ -2,6 +2,8 @@ import ClassCalendar from './components/Calendar/ClassCalendar';
 import ClassSchedule from './components/Calendar/ClassSchedule';
 import CourseList from './components/Course/CourseList';
 import CourseViewEdit from './components/Course/CourseViewEdit';
+import EnrollmentList from './components/Enrollment/EnrollmentList';
+import EnrollmentViewEdit from './components/Enrollment/EnrollmentViewEdit';
 import StudentList from './components/Student/StudentList';
 import StudentViewEdit from './components/Student/StudentViewEdit';
 
@@ -51,6 +53,27 @@ const routes: Array<{
     path: '/student/:id/update',
     name: 'Students',
     component: StudentViewEdit
+  },
+  // enrollment
+  {
+    path: '/enrollment',
+    name: 'Enrollments',
+    component: EnrollmentList
+  },
+  {
+    path: '/enrollment/new',
+    name: 'Enrollments',
+    component: EnrollmentViewEdit
+  },
+  {
+    path: '/enrollment/:id',
+    name: 'Enrollments',
+    component: EnrollmentViewEdit
+  },
+  {
+    path: '/enrollment/:id/update',
+    name: 'Enrollments',
+    component: EnrollmentViewEdit
   },
   // time
   {

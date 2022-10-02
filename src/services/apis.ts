@@ -4,3 +4,4 @@ export const CALENDAR_ALT_DAYS = '/calendar/alt-day';
 export const CALENDAR_TOGGLE_CANCEL = '/calendar/toggle-cancel';
 export const COURSES_GET = '/course';
 export const STUDENTS_GET = '/student';
+export const ENROLLMENTS_GET = '/enrollment';
