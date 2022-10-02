@@ -6,19 +6,12 @@ import config from '../../_config';
 
 const CourseSearch = ({ filter, onSearch }: { filter: any; onSearch: (values: ICourseFilter) => void }) => {
   const [form] = Form.useForm();
-  const { status, title } = filter;
-
-  const initialValues = {
-    status,
-    title,
-  };
 
   return (
     <section className='mr-24'>
       <Card>
         <Form
           form={form}
-          initialValues={initialValues}
           onFinish={(values: ICourseFilter) => {
             onSearch({
               page: 1,
