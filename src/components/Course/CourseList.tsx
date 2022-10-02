@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Button, Modal } from 'antd';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Table, PageHeader, Card, message, Space, Typography } from 'antd';
 import queryString from 'query-string';
+import {
+  EyeOutlined,
+  EditOutlined
+} from '@ant-design/icons';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -12,12 +16,10 @@ import CourseSearch from './CourseSearch';
 
 export default function CourseList() {
   const [courseList, setCourseList] = useState<ICourse[]>([]);
-  // const [callbackLogDetail, setCallbackLogDetail] = useState<ICallbackLog>();
   const [pagination, setPagination]: [any, (pagination?: any) => void] = useState();
   const [loading, setLoadingState] = useState(true);
   const history = useHistory();
   const { pathname, search } = useLocation();
-  const [isDetailVisible, setIsDetailVisible] = useState(false);
 
   const query = queryString.parse(search);
 
@@ -51,18 +53,20 @@ export default function CourseList() {
     fetchData(filter);
   }
 
-  const handleOk = () => {
-    setIsDetailVisible(false);
+  const _renderAction = (record: ICourse) => {
+    let element: JSX.Element | null = null;
+    element = (
+      <Space>
+        <Link to={`/course/${record.id}/edit`} component={Typography.Link} title='Edit'>
+          <EditOutlined />
+        </Link>
+        <Link to={`/course/${record.id}`} component={Typography.Link} title='View'>
+          <EyeOutlined />
+        </Link>
+      </Space>
+    );
+    return element;
   };
-
-  // const getDetail = (id: string) => () => {
-  //   service.getCallbackLogDetail(id).then(async (detailData: ICallbackLogDetailData) => {
-  //     detailData.data.requestData = JSON.parse(JSON.stringify(detailData.data.requestData));
-  //     detailData.data.responseData = JSON.parse(JSON.stringify(detailData.data.responseData));
-  //     setCallbackLogDetail(detailData.data);
-  //     setIsDetailVisible(true);
-  //   });
-  // };
 
   return (
     <>
@@ -89,9 +93,9 @@ export default function CourseList() {
               <Table.Column title='Description' dataIndex='description' />
               <Table.Column
                 title='Action'
-                // render={(_value: string, record: ICallbackLog) => {
-                //   return <Button onClick={getDetail(record.id)}>Detail</Button>;
-                // }}
+                render={(_value: string, record: ICourse) => {
+                  return _renderAction(record);
+                }}
               />
               <Table.Column dataIndex='id' />
             </Table>
