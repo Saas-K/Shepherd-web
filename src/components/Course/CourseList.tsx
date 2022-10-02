@@ -33,7 +33,6 @@ export default function CourseList() {
     service
       .getListCourses(filter)
       .then((res: IPageResponse<ICourse>) => {
-        console.log(res);
         setCourseList([...res.list]);
         setPagination({
           current: res.currentPage,
