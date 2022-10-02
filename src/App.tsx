@@ -13,7 +13,7 @@ const { Content, Footer } = Layout;
 
 function App() {
   return (
-    <Router basename='cms'>
+    <Router basename=''>
       <Layout className='h-full relative' >
         <Sidebar />
         <Layout className='site-layout relative'>
