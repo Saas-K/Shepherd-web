@@ -18,7 +18,7 @@ function App() {
         <Sidebar />
         <Layout className='site-layout relative'>
           <Header />
-          <Content className='p-5 scrollbar'>
+          <Content className='pl-5 pr-5 scrollbar'>
             <div className='site-layout-background px-1 py-1 h-full' style={{ minHeight: 360 }}>
               <Switch>
                 {routes.map((route, key: number): ReactElement => {
