@@ -5,8 +5,6 @@ import queryString from 'query-string';
 import {
   EyeOutlined,
   EditOutlined,
-  PlusOutlined,
-  PlusCircleOutlined
 } from '@ant-design/icons';
 
 import * as service from './core/service';
