@@ -1,5 +1,6 @@
 import ClassCalendar from './components/Calendar/ClassCalendar';
 import ClassSchedule from './components/Calendar/ClassSchedule';
+import CourseList from './components/Course/CourseList';
 
 
 const routes: Array<{
@@ -7,6 +8,11 @@ const routes: Array<{
   name: string;
   component: () => JSX.Element;
 }> = [
+  {
+    path: '/course',
+    name: 'Courses',
+    component: CourseList
+  },
   {
     path: '/calendar',
     name: 'calendar',

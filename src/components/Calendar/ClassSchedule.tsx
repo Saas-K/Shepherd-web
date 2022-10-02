@@ -9,11 +9,13 @@ import moment from 'moment';
 
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
+import * as courseService from '../Course/core/service';
 import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
 import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow, getDate } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../_common/ComponentLoading';
 import { colorsList } from '../../utils/Colors';
-import { ICourse, IPageResponse } from '../_common/core/types';
+import { IPageResponse } from '../_common/core/types';
+import { ICourse } from '../Course/core/types';
 
 export default function ClassSchedule() {
   const weekDates: string[] = getWeekDatesFormatted(new Date());
@@ -75,7 +77,7 @@ export default function ClassSchedule() {
   }
 
   const fetchAllCourses = () => {
-    service
+    courseService
     .getAllCourses()
     .then((data: IPageResponse<ICourse>) => {
       setCourses(data.list);

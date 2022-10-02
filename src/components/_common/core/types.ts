@@ -1,16 +1,11 @@
 export interface IPageResponse<T> {
   list: T[],
-  currentPage: number,
-  pageSize: number,
-  totalItems: number
+  currentPage: 1,
+  pageSize: 10,
+  totalItems: 0
 }
 
-export interface ICourse {
-  id: string,
-  name: string,
-  startDate: string,
-  active: true,
-  pricePerClass: number,
-  classPerWeek: number,
-  description: string
+export interface IPageFilter {
+  page: 1,
+  limit: 10
 }

@@ -27,7 +27,3 @@ export async function createAltDay(body: IDayClassInfo): Promise<any> {
 export async function toggleCancelClass(body: IToggleCancelClass): Promise<any> {
   return client().post(`${CALENDAR_TOGGLE_CANCEL}`, undefined, body);
 }
-
-export async function getAllCourses(): Promise<any> {
-  return client().get(`${COURSES_GET}`, {page: 0, limit: -1});
-}

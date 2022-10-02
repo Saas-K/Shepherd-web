@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // import Sidebar from './components/_common/Sidebar';
 import Header from './components/_common/Header';
 import Sidebar from './components/_common/Sidebar';
-import routes from './routes';
+import routes from './_routes';
 
 const { Content, Footer } = Layout;
 
