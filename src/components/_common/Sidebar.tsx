@@ -2,17 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import {
-  BarcodeOutlined,
-  FacebookOutlined,
-  MessageOutlined,
-  MoneyCollectOutlined,
-  RetweetOutlined,
-  SoundOutlined,
-  BellOutlined,
-  DeploymentUnitOutlined,
-  PicLeftOutlined,
-  CheckSquareOutlined,
-  UserAddOutlined,
+  CalendarOutlined,
+  ReadOutlined,
+  TeamOutlined,
+  AuditOutlined,
+  DollarCircleOutlined,
 } from '@ant-design/icons';
 
 function IconContainer({ src, title, hasChildren }: { src: any; title?: string; hasChildren?: boolean }) {
@@ -24,28 +18,32 @@ export default function Sidebar() {
     {
       key: 'course',
       path: '/course',
+      icon: <ReadOutlined />,
       title: 'Courses',
     },
     {
       key: 'student',
       path: '/student',
+      icon: <TeamOutlined />,
       title: 'Students',
     },
     {
       key: 'enrollment',
       path: '/enrollment',
+      icon: <AuditOutlined />,
       title: 'Enrollments',
     },
     {
       key: 'payment',
       path: '/payment',
+      icon: <DollarCircleOutlined />,
       title: 'Payments',
     },
     {
       key: 'time',
       path: '#',
       title: 'Time',
-      icon: <MoneyCollectOutlined/>,
+      icon: <CalendarOutlined />,
       children: [
         {
           key: 'calendar',
@@ -109,7 +107,7 @@ export default function Sidebar() {
                 );
               }
               return (
-                <Menu.Item key={key}>
+                <Menu.Item key={key} icon={icon}>
                   <span className='menu_text'>{title}</span>
                   <Link to={path} title={title} />
                 </Menu.Item>
