@@ -14,36 +14,48 @@ function _setParams(params?: any) {
 }
 
 function _setUrl(url: string, params?: any) {
-  console.log(process.env.REACT_APP_BASE_URL);
-  console.log(url);
   return process.env.REACT_APP_BASE_URL + url + _setParams(params);
 }
 
-function _handleResponse(response: AxiosResponse<any>) {
-  const responseMessage: string = response.headers.message;
-  if (responseMessage === 'OK' && response.status === 200) return response.data;
-  throw new Error(responseMessage || 'Something went wrong');
+function _handleHeaderMessage(error: any) {
+  throw new Error(error.response.headers.message || 'Something went wrong');
 }
 
 export function client() {
   async function get(url: string, params?: any) {
-    const response: AxiosResponse<any> = await axios.get(_setUrl(url, params), _getAuthHeader());
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.get(_setUrl(url, params), _getAuthHeader());
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function post(url: string, params?: any, data: any = {}) {
-    const response: AxiosResponse<any> = await axios.post(_setUrl(url, params), data, _getAuthHeader());
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.post(_setUrl(url, params), data, _getAuthHeader());
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function put(url: string, params?: any, data: any = {}) {
-    const response: AxiosResponse<any> = await axios.put(_setUrl(url, params), data, _getAuthHeader());
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.put(_setUrl(url, params), data, _getAuthHeader());
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function deletef(url: string, params?: any) {
-    const response: AxiosResponse<any> = await axios.delete(_setUrl(url, params), _getAuthHeader());
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.delete(_setUrl(url, params), _getAuthHeader());
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   return {
@@ -56,23 +68,39 @@ export function client() {
 
 export function clientNoAuth() {
   async function get(url: string, params?: any) {
-    const response: AxiosResponse<any> = await axios.get(_setUrl(url, params));
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.get(_setUrl(url, params));
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function post(url: string, params?: any, data: any = {}) {
-    const response: AxiosResponse<any> = await axios.post(_setUrl(url, params), data);
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.post(_setUrl(url, params), data);
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function put(url: string, params?: any, data: any = {}) {
-    const response: AxiosResponse<any> = await axios.put(_setUrl(url, params), data);
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.put(_setUrl(url, params), data);
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   async function deletef(url: string, params?: any) {
-    const response: AxiosResponse<any> = await axios.delete(_setUrl(url, params));
-    return _handleResponse(response);
+    try {
+      const response: AxiosResponse<any> = await axios.delete(_setUrl(url, params));
+      return response.data;
+    } catch (error: any) {
+      _handleHeaderMessage(error);
+    }
   }
 
   return {
