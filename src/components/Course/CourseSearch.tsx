@@ -1,5 +1,6 @@
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
+import { SearchOutlined } from '@ant-design/icons';
 
 import { ICourseFilter } from './core/types';
 import config from '../../_config';
@@ -51,7 +52,7 @@ const CourseSearch = ({ filter, onSearch }: { filter: any; onSearch: (values: IC
           </Row>
           <Row>
             <Button type='primary' htmlType='submit'>
-              Search
+              <SearchOutlined />
             </Button>
           </Row>
         </Form>
