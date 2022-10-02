@@ -1,6 +1,7 @@
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import { SearchOutlined } from '@ant-design/icons';
+import TextArea from 'antd/lib/input/TextArea';
 
 import { ICourseFilter } from './core/types';
 import config from '../../_config';
@@ -9,7 +10,7 @@ const CourseSearch = ({ filter, onSearch }: { filter: any; onSearch: (values: IC
   const [form] = Form.useForm();
 
   return (
-    <section className='mr-24'>
+    <section>
       <Card>
         <Form
           form={form}
@@ -26,19 +27,16 @@ const CourseSearch = ({ filter, onSearch }: { filter: any; onSearch: (values: IC
           layout='vertical'
         >
           <Row>
-            <Col span={4} className='pdr-12'>
+            <Col span={4}>
               <Form.Item name='startDateFrom' label='From start date'>
                 <DatePicker placeholder='Select date' />
               </Form.Item>
             </Col>
-            <Col span={4} className='pdr-12'>
+            <Col span={4}>
               <Form.Item name='startDateTo' label='To start date'>
                 <DatePicker placeholder='Select date' />
               </Form.Item>
             </Col>
-            
-          </Row>
-          <Row>
             <Col span={4} className='pdr-12'>
               <Form.Item name='name' label='Course name'>
                 <Input />
@@ -46,14 +44,16 @@ const CourseSearch = ({ filter, onSearch }: { filter: any; onSearch: (values: IC
             </Col>
             <Col span={4} className='pdr-12'>
               <Form.Item name='description' label='Description'>
-                <Input />
+                <TextArea />
               </Form.Item>
             </Col>
           </Row>
           <Row>
-            <Button type='primary' htmlType='submit'>
-              <SearchOutlined />
-            </Button>
+            <Col span={24} style={{ textAlign: 'right' }}>
+              <Button type='primary' htmlType='submit'>
+                Search
+              </Button>
+            </Col>
           </Row>
         </Form>
       </Card>

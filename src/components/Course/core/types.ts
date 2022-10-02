@@ -1,13 +1,13 @@
 import { IPageFilter } from "../../_common/core/types"
 
 export interface ICourse {
-  id: string,
+  id?: string,
   name: string,
   startDate: string,
-  active: true,
+  active?: true,
   pricePerClass: number,
   classPerWeek: number,
-  description: string
+  description?: string
 }
 
 export interface ICourseFilter extends IPageFilter {

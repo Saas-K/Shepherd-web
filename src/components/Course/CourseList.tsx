@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography } from 'antd';
+import { Table, PageHeader, Card, message, Space, Typography, Button } from 'antd';
 import queryString from 'query-string';
 import {
   EyeOutlined,
-  EditOutlined
+  EditOutlined,
+  PlusOutlined,
+  PlusCircleOutlined
 } from '@ant-design/icons';
 
 import * as service from './core/service';
@@ -31,6 +33,7 @@ export default function CourseList() {
     service
       .getListCourses(filter)
       .then((res: IPageResponse<ICourse>) => {
+        console.log(res);
         setCourseList([...res.list]);
         setPagination({
           current: res.currentPage,
@@ -57,7 +60,7 @@ export default function CourseList() {
     let element: JSX.Element | null = null;
     element = (
       <Space>
-        <Link to={`/course/${record.id}/edit`} component={Typography.Link} title='Edit'>
+        <Link to={`/course/${record.id}/update`} component={Typography.Link} title='Edit'>
           <EditOutlined />
         </Link>
         <Link to={`/course/${record.id}`} component={Typography.Link} title='View'>
@@ -68,9 +71,17 @@ export default function CourseList() {
     return element;
   };
 
+  const _renderExtra = () => {
+    return (
+      <Button type='primary' onClick={() => {history.push('/course/new')}}>
+        + Create
+      </Button>
+    );
+  };
+
   return (
     <>
-      <PageHeader className='site-page-header' title='Courses' />
+      <PageHeader className='site-page-header' title='Courses' extra={_renderExtra()} />
       <CourseSearch
         filter={query}
         onSearch={(values: ICourseFilter) => {
@@ -81,8 +92,8 @@ export default function CourseList() {
       {loading ? (
         <ComponentLoading />
       ) : (
-        <section className='mr-24'>
-          <Card title='Callback Log'>
+        <section>
+          <Card>
             <Table 
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={courseList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Name' dataIndex='name' />
