@@ -42,8 +42,8 @@ export default function EnrollmentViewEdit() {
     .then((res: IEnrollment) => {
       if (!form) return;
       form.setFieldsValue({
-        course: res.course,
-        student: res.student,
+        course: JSON.stringify(res.course),
+        student: JSON.stringify(res.student),
         date: moment(res.date),
         active: res.active,
         sendNotification: res.sendNotification
@@ -85,8 +85,8 @@ export default function EnrollmentViewEdit() {
       course: JSON.parse(values.course),
       student: JSON.parse(values.student),
       date: values.date,
-      active: values.active || true,
-      sendNotification: values.sendNotification || true
+      active: values.active,
+      sendNotification: values.sendNotification
     };
 
     try {
@@ -111,7 +111,7 @@ export default function EnrollmentViewEdit() {
     return students.map((student: IStudent) => {
       return (
         <Option key={student.id} value={JSON.stringify(student)}>
-          {`${student.name} ${student.mobile} ${student.parentMobile}`}
+          {`${student.name} ${student.mobile || ''} ${student.parentMobile || ''}`}
         </Option>
       );
     });
@@ -121,7 +121,7 @@ export default function EnrollmentViewEdit() {
     return courses.map((course: ICourse) => {
       return (
         <Option key={course.id} value={JSON.stringify(course)}>
-          {course.name}
+          {`${course.name}`}
         </Option>
       );
     });
@@ -150,6 +150,7 @@ export default function EnrollmentViewEdit() {
                 filterOption={(input, option) =>
                   (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                 }
+                disabled={action === VIEW_ACTION}
               >
                 {_renderStudentOptions()}
               </Select>
@@ -171,6 +172,7 @@ export default function EnrollmentViewEdit() {
                 filterOption={(input, option) =>
                   (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                 }
+                disabled={action === VIEW_ACTION}
               >
                 {_renderCourseOptions()}
               </Select>

@@ -53,7 +53,7 @@ export default function StudentViewEdit() {
       mobile: values.mobile,
       parentMobile: values.parentMobile,
       note: values.note,
-      active: values.active || true
+      active: values.active
     };
 
     try {
