@@ -1,6 +1,6 @@
 import { client } from "../../../services/client";
 import {
-  CALENDAR_DAYS_GET, CALENDAR_MAIN_DAYS, CALENDAR_ALT_DAYS, COURSES_GET, CALENDAR_TOGGLE_CANCEL
+  CALENDAR_DAYS_GET, CALENDAR_MAIN_DAYS, CALENDAR_ALT_DAYS, CALENDAR_TOGGLE_CANCEL
 } from '../../../services/apis';
 import { IMainDay, IDayClassInfo, IToggleCancelClass } from "./types";
 
