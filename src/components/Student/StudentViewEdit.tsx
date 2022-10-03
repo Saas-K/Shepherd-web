@@ -53,7 +53,7 @@ export default function StudentViewEdit() {
       mobile: values.mobile,
       parentMobile: values.parentMobile,
       note: values.note,
-      active: values.active
+      active: values.active || true
     };
 
     try {
@@ -117,7 +117,7 @@ export default function StudentViewEdit() {
             <Row>
               <Col span={6} className='pdr-12'>
                 <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-                  <Switch disabled={action === VIEW_ACTION} />
+                  <Switch disabled={action === VIEW_ACTION} defaultChecked />
                 </Form.Item>
               </Col>
             </Row>
