@@ -5,3 +5,4 @@ export const CALENDAR_TOGGLE_CANCEL = '/calendar/toggle-cancel';
 export const COURSES_GET = '/course';
 export const STUDENTS_GET = '/student';
 export const ENROLLMENTS_GET = '/enrollment';
+export const PAYMENTS_GET = '/payment';

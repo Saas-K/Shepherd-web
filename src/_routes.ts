@@ -6,6 +6,7 @@ import EnrollmentList from './components/Enrollment/EnrollmentList';
 import EnrollmentViewEdit from './components/Enrollment/EnrollmentViewEdit';
 import StudentList from './components/Student/StudentList';
 import StudentViewEdit from './components/Student/StudentViewEdit';
+import PaymentList from './components/Payment/PaymentList';
 
 const routes: Array<{
   path: string;
@@ -73,6 +74,27 @@ const routes: Array<{
   {
     path: '/enrollment/:id/update',
     name: 'Enrollments',
+    component: EnrollmentViewEdit
+  },
+  // payment
+  {
+    path: '/payment',
+    name: 'Payments',
+    component: PaymentList
+  },
+  {
+    path: '/payment/new',
+    name: 'Payments',
+    component: EnrollmentViewEdit
+  },
+  {
+    path: '/payment/:id',
+    name: 'Payments',
+    component: EnrollmentViewEdit
+  },
+  {
+    path: '/payment/:id/update',
+    name: 'Payments',
     component: EnrollmentViewEdit
   },
   // time
