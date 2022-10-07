@@ -93,20 +93,38 @@ export default function PaymentViewEdit() {
             <Form.Item
               name='courseName'
               label={<Label title='Course name' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Course name date is required',
+                },
+              ]}
             >
-              <Input disabled />
+              <Input disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='studentName'
               label={<Label title='Student name' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Student name date is required',
+                },
+              ]}
             >
-              <Input disabled />
+              <Input disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='price'
               label={<Label title='Price' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Price is required',
+                },
+              ]}
             >
-              <Input disabled />
+              <Input disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='date'
@@ -118,7 +136,7 @@ export default function PaymentViewEdit() {
                 },
               ]}
             >
-              <DatePicker placeholder='Select date' disabled={action === VIEW_ACTION} />
+              <DatePicker placeholder='Select date' disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='paymentDate'
