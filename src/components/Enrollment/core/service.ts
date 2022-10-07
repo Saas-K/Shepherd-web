@@ -8,6 +8,10 @@ export async function getListEnrollments(filter: IEnrollmentFilter): Promise<any
   return client().get(`${ENROLLMENTS_GET}`, filter);
 }
 
+export async function getAllEnrollments(): Promise<any> {
+  return client().get(`${ENROLLMENTS_GET}`, {page: 0, limit: -1});
+}
+
 export async function getEnrollment(id: string): Promise<any> {
   return client().get(`${ENROLLMENTS_GET}/${id}`);
 }
