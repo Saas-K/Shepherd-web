@@ -95,7 +95,6 @@ export default function PaymentList() {
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={paymentList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Course name' dataIndex='courseName' />
               <Table.Column title='Student name' dataIndex='studentName' />
-              <Table.Column title='Parent mobile' dataIndex='parentMobile' />
               <Table.Column title='Price' dataIndex='price' />
               <Table.Column title='Debt' dataIndex='unpaid' />
               <Table.Column title='Notice date' dataIndex='date' />

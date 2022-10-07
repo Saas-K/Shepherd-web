@@ -1,7 +1,7 @@
 import { IPageFilter } from "../../_common/core/types"
 
 export interface IPayment {
-  id: string,
+  id?: string,
   enrollmentId: string,
   sendNotification: boolean,
   courseId: string,
