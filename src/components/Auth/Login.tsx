@@ -40,7 +40,7 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
     <Form
       name="basic"
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
+      wrapperCol={{ span: 4 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
       autoComplete="off"
@@ -48,7 +48,7 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
       <Form.Item
         label="Username"
         name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: 'Username required!' }]}
       >
         <Input />
       </Form.Item>
@@ -56,7 +56,7 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
       <Form.Item
         label="Password"
         name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        rules={[{ required: true, message: 'Password required!' }]}
       >
         <Input.Password />
       </Form.Item>
