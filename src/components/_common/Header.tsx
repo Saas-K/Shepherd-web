@@ -13,12 +13,8 @@ export default function Header() {
           title='Logout'
           onClick={async (event: React.MouseEvent) => {
             event.preventDefault();
-            // service.doLogout().then(() => {
-            //   removeCookiesAuth();
-            //   history.push('/');
-            //   window.location.reload();
-            // });
-            history.push('/');
+            localStorage.clear();
+            history.push('/login');
             window.location.reload();
           }}
         >
@@ -32,7 +28,7 @@ export default function Header() {
     <Layout.Header className='site-layout-background p-0'>
       <Dropdown trigger={['click']} overlay={menu} className='float-right mr-3'>
         <a href='/' className='ant-dropdown-link' onClick={(e) => e.preventDefault()}>
-          <strong>User&apos;s name</strong>
+          <strong>{localStorage.getItem('username')}</strong>
         </a>
       </Dropdown>
     </Layout.Header>
