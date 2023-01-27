@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { render } from 'react-dom';
-import { Calendar, Modal, Button, Col, Form, Input, message, Descriptions, Space, Select, Collapse } from 'antd';
-import type { Moment } from 'moment';
-import moment from 'moment';
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate, ViewApi, CalendarApi } from '@fullcalendar/react'
+import { Modal, message, Space } from 'antd';
+import FullCalendar, { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -384,7 +381,8 @@ export default function ClassCalendar() {
         cancelText='Exit'
         onCancel={() => {
           setIsEventEditVisible(false); 
-          setPendingAlt(undefined)
+          setPendingAlt(undefined);
+          setClasses([...classes]);
         }}
       >
         {pendingAlt ? _renderEditInput() : undefined}
