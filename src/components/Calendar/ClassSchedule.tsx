@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
 import { Modal, message, Select, Collapse, Button, Row, Space } from 'antd';
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate, ViewApi } from '@fullcalendar/react'
+import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
