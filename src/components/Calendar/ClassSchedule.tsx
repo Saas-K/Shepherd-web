@@ -278,7 +278,7 @@ export default function ClassSchedule() {
         slotDuration='00:15:00'
         slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
         slotMinTime='06:00:00'
-        slotMaxTime='22:00:00'
+        slotMaxTime='23:00:00'
         forceEventDuration
         defaultTimedEventDuration='00:30:00'
         dayHeaderContent={(args) => {
