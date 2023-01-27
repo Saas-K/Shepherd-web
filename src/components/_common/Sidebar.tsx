@@ -65,7 +65,7 @@ export default function Sidebar() {
   const defaultSelectedKeys: string[] = ['1'];
 
   return (
-    <Layout.Sider style={{ background: '#F1F1F1' }} width={230} collapsible collapsed={collapsed} onCollapse={(value: boolean | ((prevState: boolean) => boolean)) => setCollapsed(value)}>
+    <Layout.Sider style={{ background: 'white' }} width={230} collapsible collapsed={collapsed} onCollapse={(value: boolean | ((prevState: boolean) => boolean)) => setCollapsed(value)}>
       <div className='sidebar__title'>
         Side bar title
       </div>
