@@ -379,9 +379,9 @@ export default function ClassCalendar() {
         visible={isEventEditVisible}
         width='50%'
         confirmLoading={loading}
-        okText={pendingAlt ? 'Confirm': (selectedClass?.active ? 'Call off' : 'Undo Call off')}
+        okText={pendingAlt ? 'Confirm': (selectedClass?.active ? 'Cancel' : 'Undo Cancel')}
         onOk={pendingAlt ? handleAltSubmit : handleToggleCancelSubmit}
-        cancelText='Cancel'
+        cancelText='Exit'
         onCancel={() => {
           setIsEventEditVisible(false); 
           setPendingAlt(undefined)
