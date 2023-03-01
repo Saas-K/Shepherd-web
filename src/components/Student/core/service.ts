@@ -4,8 +4,8 @@ import {
 } from '../../../services/apis';
 import { IStudent, IStudentFilter } from "./types";
 
-export async function getAllStudents(): Promise<any> {
-  return client().get(`${STUDENTS_GET}`, {page: 0, limit: -1});
+export async function getAllActiveStudents(): Promise<any> {
+  return client().get(`${STUDENTS_GET}`, {page: 0, limit: -1, active: true});
 }
 
 export async function getListStudents(filter: IStudentFilter): Promise<any> {

@@ -67,7 +67,7 @@ export default function EnrollmentViewEdit() {
 
   const fetchAllStudents = () => {
     studentService
-    .getAllStudents()
+    .getAllActiveStudents()
     .then((data: IPageResponse<IStudent>) => {
       setStudents(data.list);
     })
