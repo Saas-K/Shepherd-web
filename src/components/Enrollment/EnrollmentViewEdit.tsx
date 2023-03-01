@@ -31,8 +31,8 @@ export default function EnrollmentViewEdit() {
 
   useEffect(() => {
     fetchData();
-    fetchAllCourses();
-    fetchAllStudents();
+    fetchAllActiveCourses();
+    fetchAllActiveStudents();
   }, []);
 
   function fetchData() {
@@ -54,7 +54,7 @@ export default function EnrollmentViewEdit() {
     });
   }
 
-  const fetchAllCourses = () => {
+  const fetchAllActiveCourses = () => {
     courseService
     .getAllActiveCourses()
     .then((data: IPageResponse<ICourse>) => {
@@ -65,7 +65,7 @@ export default function EnrollmentViewEdit() {
     });
   }
 
-  const fetchAllStudents = () => {
+  const fetchAllActiveStudents = () => {
     studentService
     .getAllActiveStudents()
     .then((data: IPageResponse<IStudent>) => {
