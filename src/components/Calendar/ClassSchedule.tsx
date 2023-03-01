@@ -32,7 +32,7 @@ export default function ClassSchedule() {
 
   useEffect(() => {
     fetchData();
-    fetchAllCourses();
+    fetchAllActiveCourses();
   }, []);
 
   const fetchData = () => {
@@ -75,9 +75,9 @@ export default function ClassSchedule() {
     };
   }
 
-  const fetchAllCourses = () => {
+  const fetchAllActiveCourses = () => {
     courseService
-    .getAllCourses()
+    .getAllActiveCourses()
     .then((data: IPageResponse<ICourse>) => {
       setCourses(data.list);
     })
