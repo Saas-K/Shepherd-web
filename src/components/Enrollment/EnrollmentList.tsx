@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button } from 'antd';
+import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
 import queryString from 'query-string';
 import {
   EyeOutlined,
@@ -95,7 +95,7 @@ export default function EnrollmentList() {
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={enrollmentList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Student Name' dataIndex={['student', 'name']} />
               <Table.Column title='Course Name' dataIndex={['course', 'name']} />
-              <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? 'Active': 'Inactive'} />
+              <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column title='SMS' dataIndex='sendNotification' render={(notify: boolean) => notify ? 'Yes': 'No'} />
               <Table.Column
                 title='Action'

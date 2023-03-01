@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button } from 'antd';
+import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
 import queryString from 'query-string';
 import {
   EyeOutlined,
@@ -95,7 +95,7 @@ export default function CourseList() {
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={courseList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Name' dataIndex='name' />
               <Table.Column title='Start date' dataIndex='startDate' />
-              <Table.Column title='Active' dataIndex='active' />
+              <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column title='Price (per class)' dataIndex='pricePerClass' />
               <Table.Column title='Classes (per week)' dataIndex='classPerWeek' />
               <Table.Column title='Description' dataIndex='description' />

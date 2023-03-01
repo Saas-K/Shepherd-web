@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button } from 'antd';
+import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
 import queryString from 'query-string';
 import {
   EyeOutlined,
@@ -97,7 +97,7 @@ export default function StudentList() {
               <Table.Column title='Mobile' dataIndex='mobile' />
               <Table.Column title='Parent mobile' dataIndex='parentMobile' />
               <Table.Column title='Note' dataIndex='note' />
-              <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? 'Active': 'Inactive'} />
+              <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column
                 title='Action'
                 render={(_value: string, record: IStudent) => {
