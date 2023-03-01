@@ -56,7 +56,7 @@ export default function EnrollmentViewEdit() {
 
   const fetchAllCourses = () => {
     courseService
-    .getAllCourses()
+    .getAllActiveCourses()
     .then((data: IPageResponse<ICourse>) => {
       setCourses(data.list);
     })

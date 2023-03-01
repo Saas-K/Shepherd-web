@@ -4,8 +4,8 @@ import {
 } from '../../../services/apis';
 import { ICourse, ICourseFilter } from "./types";
 
-export async function getAllCourses(): Promise<any> {
-  return client().get(`${COURSES_GET}`, {page: 0, limit: -1});
+export async function getAllActiveCourses(): Promise<any> {
+  return client().get(`${COURSES_GET}`, {page: 0, limit: -1, active: true});
 }
 
 export async function getListCourses(filter: ICourseFilter): Promise<any> {
