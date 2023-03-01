@@ -13,6 +13,7 @@ import { ICourse, ICourseFilter } from './core/types';
 import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import CourseSearch from './CourseSearch';
+import { currency } from '../../utils/StringUtils';
 
 export default function CourseList() {
   const [courseList, setCourseList] = useState<ICourse[]>([]);
@@ -96,7 +97,7 @@ export default function CourseList() {
               <Table.Column title='Name' dataIndex='name' />
               <Table.Column title='Start date' dataIndex='startDate' />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
-              <Table.Column title='Price (per class)' dataIndex='pricePerClass' />
+              <Table.Column title='Price (per class)' dataIndex='pricePerClass' render={(_price: string) => currency(_price)} />
               <Table.Column title='Classes (per week)' dataIndex='classPerWeek' />
               <Table.Column title='Description' dataIndex='description' />
               <Table.Column

@@ -13,6 +13,7 @@ import { IPayment, IPaymentFilter } from './core/types';
 import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import PaymentSearch from './PaymentSearch';
+import { currency } from '../../utils/StringUtils';
 
 export default function PaymentList() {
   const [paymentList, setPaymentList] = useState<IPayment[]>([]);
@@ -95,8 +96,8 @@ export default function PaymentList() {
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={paymentList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Course name' dataIndex='courseName' />
               <Table.Column title='Student name' dataIndex='studentName' />
-              <Table.Column title='Price' dataIndex='price' />
-              <Table.Column title='Debt' dataIndex='unpaid' />
+              <Table.Column title='Price' dataIndex='price' render={(_price: string) => currency(_price)} />
+              <Table.Column title='Debt' dataIndex='unpaid' render={(_unpaid: string) => currency(_unpaid)} />
               <Table.Column title='Notice date' dataIndex='date' />
               <Table.Column title='Paid date' dataIndex='paidDate' />
               <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? 'Yes': 'No'} />
