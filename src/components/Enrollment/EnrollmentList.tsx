@@ -96,7 +96,7 @@ export default function EnrollmentList() {
               <Table.Column title='Student Name' dataIndex={['student', 'name']} />
               <Table.Column title='Course Name' dataIndex={['course', 'name']} />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
-              <Table.Column title='SMS' dataIndex='sendNotification' render={(notify: boolean) => notify ? 'Yes': 'No'} />
+              <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? <Tag color='success'>Yes</Tag> : <Tag color='error'>No</Tag>} />
               <Table.Column
                 title='Action'
                 render={(_value: string, record: IEnrollment) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button } from 'antd';
+import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
 import queryString from 'query-string';
 import {
   EyeOutlined,
@@ -100,7 +100,7 @@ export default function PaymentList() {
               <Table.Column title='Debt' dataIndex='unpaid' render={(_unpaid: string) => currency(_unpaid)} />
               <Table.Column title='Notice date' dataIndex='date' />
               <Table.Column title='Paid date' dataIndex='paidDate' />
-              <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? 'Yes': 'No'} />
+              <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? <Tag color='success'>Yes</Tag> : <Tag color='error'>No</Tag>} />
               <Table.Column
                 title='Action'
                 render={(_value: string, record: IPayment) => {
