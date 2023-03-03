@@ -192,12 +192,12 @@ export default function EnrollmentViewEdit() {
               </Form.Item>
             </Col>
             <Col span={6} className='pdr-12'>
-              <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
+              <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
                 <Switch disabled={action === VIEW_ACTION} defaultChecked />
               </Form.Item>
             </Col>
             <Col span={6} className='pdr-12'>
-              <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
+              <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
                 <Switch disabled={action === VIEW_ACTION} defaultChecked />
               </Form.Item>
             </Col>
