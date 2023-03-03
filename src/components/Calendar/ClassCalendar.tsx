@@ -106,7 +106,7 @@ export default function ClassCalendar() {
       title: dayClass.courseName,
       start: `${date}T${dayClass.begin}`,
       end: `${date}T${dayClass.end}`,
-      backgroundColor: 'green',
+      backgroundColor: '#10ac84',
       extendedProps: {
         courseId: dayClass.courseId,
         courseName: dayClass.courseName,

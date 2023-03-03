@@ -64,7 +64,7 @@ export default function ClassSchedule() {
       title: _class.courseName,
       start: getDate(weekDates, _class.weekDay, _class.begin),
       end: getDate(weekDates, _class.weekDay, _class.end),
-      backgroundColor: 'blue',
+      backgroundColor: '#e58e26',
       extendedProps: {
         courseId: _class.courseId,
         courseName: _class.courseName,
