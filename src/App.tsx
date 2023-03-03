@@ -39,7 +39,7 @@ function App() {
                 </Switch>
               </div>
             </Content>
-            <Footer className='text-center p-3'>Footer</Footer>
+            {/* <Footer className='text-center p-3'>Footer</Footer> */}
           </Layout>
         </Layout>
       )}
