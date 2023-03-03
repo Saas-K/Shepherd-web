@@ -150,7 +150,7 @@ export default function EnrollmentViewEdit() {
                 filterOption={(input, option) =>
                   (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                 }
-                disabled={action === VIEW_ACTION}
+                disabled={action !== CREATE_ACTION}
               >
                 {_renderStudentOptions()}
               </Select>
@@ -172,7 +172,7 @@ export default function EnrollmentViewEdit() {
                 filterOption={(input, option) =>
                   (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                 }
-                disabled={action === VIEW_ACTION}
+                disabled={action !== CREATE_ACTION}
               >
                 {_renderCourseOptions()}
               </Select>
