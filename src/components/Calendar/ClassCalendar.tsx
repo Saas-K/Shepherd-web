@@ -44,12 +44,6 @@ export default function ClassCalendar() {
   const [originalClass, setOriginalClass] = useState<IDayClassInfo>();
   const [pendingAlt, setPendingAlt] = useState<IDayClassInfo>();
 
-    // TODO:
-    /**
-     * alter main day class: drag/resize main day -> show update pop up -> confirm
-     * cancel class: click class -> show pop up -> toggle cancel
-     */
-
   useEffect(() => {
     const now: Date = new Date();
     setCurrentMonth(`${now.getFullYear}-${now.getMonth}`);
