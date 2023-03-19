@@ -7,7 +7,8 @@ export interface ICourse {
   active?: true,
   pricePerClass: number,
   classPerWeek: number,
-  description?: string
+  description?: string,
+  color: string,
 }
 
 export interface ICourseFilter extends IPageFilter {
