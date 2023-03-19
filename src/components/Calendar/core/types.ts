@@ -8,7 +8,8 @@ export interface IDayClassInfo {
   mainDayClassId?: string,
   mainDayClassDate?: string,
   date?: string,
-  active?: boolean
+  active?: boolean,
+  color?: string
 }
 
 export interface IMainDay {
@@ -17,8 +18,9 @@ export interface IMainDay {
   courseName?: string,
   weekDay?: number,
   begin?: string,
-  end?: string
-  active?: true
+  end?: string,
+  active?: true,
+  color?: string
 }
 
 export interface IFullCalendarEvent {
@@ -40,7 +42,8 @@ export interface IClassMeta {
   mainDayClassId?: string,
   mainDayClassDate?: string,
   date?: string,
-  active?: boolean
+  active?: boolean,
+  color?: string
 }
 
 export interface IClassSlot {

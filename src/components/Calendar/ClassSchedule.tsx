@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, message, Select, Collapse, Button, Row, Space } from 'antd';
+import { Modal, message, Select, Collapse, Button, Row, Space, Tag } from 'antd';
 import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -25,7 +25,6 @@ export default function ClassSchedule() {
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
-  const [colorMap, setColorMap] = useState<Map<string, string | undefined>>(new Map());
   const [mainDayClass, setMainDayClass] = useState<IMainDay>();
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [editMode, setEditMode] = useState<string>(CREATE);
@@ -40,17 +39,10 @@ export default function ClassSchedule() {
     .getMainDays()
     .then((data: IMainDay[]) => {
       const _classes: IFullCalendarEvent[] = [];
-      // let colorIndex = 0;
       for (const _class of data) {
-        // if (_class.courseId && !colorMap.has(_class.courseId)) {
-        //   colorMap.set(_class.courseId, colorsList.at(colorIndex));
-        //   colorIndex++;
-        // }
-
         _classes.push(toFullCalendarEvent(_class));
       }
       setClasses([..._classes]);
-      // setColorMap({...colorMap});
     })
     .catch(error => {
       message.error(error.message);
@@ -64,13 +56,14 @@ export default function ClassSchedule() {
       title: _class.courseName,
       start: getDate(weekDates, _class.weekDay, _class.begin),
       end: getDate(weekDates, _class.weekDay, _class.end),
-      backgroundColor: '#e58e26',
+      backgroundColor: _class.color,
       extendedProps: {
         courseId: _class.courseId,
         courseName: _class.courseName,
         weekDay: _class.weekDay,
         begin: _class.begin,
-        end: _class.end
+        end: _class.end,
+        color: _class.color
       }
     };
   }

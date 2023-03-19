@@ -100,7 +100,7 @@ export default function ClassCalendar() {
       title: dayClass.courseName,
       start: `${date}T${dayClass.begin}`,
       end: `${date}T${dayClass.end}`,
-      backgroundColor: '#10ac84',
+      backgroundColor: dayClass.color,
       extendedProps: {
         courseId: dayClass.courseId,
         courseName: dayClass.courseName,
@@ -110,7 +110,8 @@ export default function ClassCalendar() {
         mainDayClassId: dayClass.mainDayClassId,
         mainDayClassDate: dayClass.mainDayClassDate,
         date,
-        active: dayClass.active
+        active: dayClass.active,
+        color: dayClass.color
       }
     }
   }
@@ -242,7 +243,8 @@ export default function ClassCalendar() {
       mainDayClassId: _event.extendedProps.mainDayClassId,
       mainDayClassDate: _event.extendedProps.mainDayClassDate,
       date: _event.extendedProps.date,
-      active: _event.extendedProps.active
+      active: _event.extendedProps.active,
+      color: _event.extendedProps.color
     });
     setIsEventEditVisible(true);
   }
