@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, message, Select, Collapse, Button, Row, Space, Tag } from 'antd';
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg } from '@fullcalendar/react'
+import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, EventChangeArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -22,7 +22,7 @@ export default function ClassSchedule() {
   const UPDATE = 'Update';
   
   const [loading, setLoading] = useState(true);
-  const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
+  const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false);
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
   const [mainDayClass, setMainDayClass] = useState<IMainDay>();
@@ -132,7 +132,7 @@ export default function ClassSchedule() {
     service.createMainDay({
       id: selectedSlot?.id || undefined,
       courseId: selectedSlot?.courseId || courses.at(0)?.id,
-      weekDay: selectedSlot?.weekDay,
+      weekDay: selectedSlot?.weekDay === 0 ? 7 : selectedSlot?.weekDay,
       begin: `${selectedSlot?.startStr}:00`,
       end: `${selectedSlot?.endStr}:00`,
       active: true
@@ -162,7 +162,7 @@ export default function ClassSchedule() {
     });
   }
 
-  const handleClassInfoChange = (changeInfo: any) => {
+  const handleClassInfoChange = (changeInfo: EventChangeArg) => {
     const _event: EventApi = changeInfo.event;
     service.createMainDay({
       id: _event?.id || undefined,
@@ -184,6 +184,7 @@ export default function ClassSchedule() {
     })
     .catch(error => {
       message.error(error.message);
+      changeInfo.revert();
     })
     .finally(() => {
       setSelectedSlot(undefined);
