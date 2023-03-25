@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, message, Space } from 'antd';
-import FullCalendar, { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/react'
+import FullCalendar, { EventApi, EventChangeArg, EventClickArg, EventContentArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -116,7 +116,7 @@ export default function ClassCalendar() {
     }
   }
 
-  const handleClassInfoChange = (changeInfo: any) => {
+  const handleClassInfoChange = (changeInfo: EventChangeArg) => {
     const _event: EventApi = changeInfo.event;
     const originalClass: IDayClassInfo | null = getOriginalClassInfo(_event.id);
 
@@ -180,6 +180,7 @@ export default function ClassCalendar() {
       })
       .catch(error => {
         message.error(error.message);
+        setClasses([...classes]);
       })
       .finally(async () => {
         setPendingAlt(undefined);
