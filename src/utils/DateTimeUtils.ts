@@ -1,6 +1,9 @@
+import moment from 'moment';
 import { numberPadLeft } from './StringUtils';
 
 const weekDayNames: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+export const VN_DATE_FORMAT = 'DD/MM/YYYY';
 
 export function getWeekDayName(weekDay: number | undefined): string {
   if (weekDay === undefined) return '';
@@ -147,4 +150,9 @@ export function compareYearMonthStr(date1: string | undefined, date2: string | u
     return -1;
   }
   return 0;
+}
+
+export function formatVNDate(date: any): any {
+  if (!date) return undefined;
+  return moment(date).format(VN_DATE_FORMAT);
 }

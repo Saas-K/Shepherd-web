@@ -14,6 +14,7 @@ import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import PaymentSearch from './PaymentSearch';
 import { currency } from '../../utils/StringUtils';
+import { formatVNDate } from '../../utils/DateTimeUtils';
 
 export default function PaymentList() {
   const [paymentList, setPaymentList] = useState<IPayment[]>([]);
@@ -98,8 +99,8 @@ export default function PaymentList() {
               <Table.Column title='Student name' dataIndex='studentName' />
               <Table.Column title='Price' dataIndex='price' render={(_price: string) => currency(_price)} />
               <Table.Column title='Debt' dataIndex='unpaid' render={(_unpaid: string) => currency(_unpaid)} />
-              <Table.Column title='Notice date' dataIndex='date' />
-              <Table.Column title='Paid date' dataIndex='paidDate' />
+              <Table.Column title='Notice date' dataIndex='date' render={(_date: Date) => formatVNDate(_date)} />
+              <Table.Column title='Paid date' dataIndex='paidDate' render={(_date: Date) => formatVNDate(_date)} />
               <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? <Tag color='success'>Yes</Tag> : <Tag color='error'>No</Tag>} />
               <Table.Column
                 title='Action'

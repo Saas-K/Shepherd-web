@@ -6,6 +6,7 @@ import {
   EyeOutlined,
   EditOutlined,
 } from '@ant-design/icons';
+import moment from 'moment';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -14,6 +15,7 @@ import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import CourseSearch from './CourseSearch';
 import { currency } from '../../utils/StringUtils';
+import { formatVNDate } from '../../utils/DateTimeUtils';
 
 export default function CourseList() {
   const [courseList, setCourseList] = useState<ICourse[]>([]);
@@ -95,7 +97,7 @@ export default function CourseList() {
             <Table 
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={courseList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Name' dataIndex='name' />
-              <Table.Column title='Start date' dataIndex='startDate' />
+              <Table.Column title='Start date' dataIndex='startDate' render={(date: Date) => formatVNDate(date)} />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column title='Price (per class)' dataIndex='pricePerClass' render={(_price: string) => currency(_price)} />
               <Table.Column title='Classes (per week)' dataIndex='classPerWeek' />
