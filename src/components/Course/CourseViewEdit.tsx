@@ -149,7 +149,7 @@ export default function CourseViewEdit() {
                     },
                   ]}
                 >
-                  <DatePicker format='DD/MM/YYYY' showTime={{ format: 'HH:mm' }} disabled={action === VIEW_ACTION} />
+                  <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION} />
                 </Form.Item>
               </Col>
               <Col span={6} className='pdr-12'>
