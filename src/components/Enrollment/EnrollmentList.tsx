@@ -103,7 +103,6 @@ export default function EnrollmentList() {
                   return _renderAction(record);
                 }}
               />
-              <Table.Column dataIndex='id' />
             </Table>
           </Card>
         </section>

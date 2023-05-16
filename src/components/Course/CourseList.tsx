@@ -108,7 +108,6 @@ export default function CourseList() {
                   return _renderAction(record);
                 }}
               />
-              <Table.Column dataIndex='id' />
             </Table>
           </Card>
         </section>

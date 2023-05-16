@@ -104,7 +104,6 @@ export default function StudentList() {
                   return _renderAction(record);
                 }}
               />
-              <Table.Column dataIndex='id' />
             </Table>
           </Card>
         </section>
