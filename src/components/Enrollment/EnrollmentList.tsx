@@ -13,6 +13,7 @@ import { IEnrollment, IEnrollmentFilter } from './core/types';
 import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import EnrollmentSearch from './EnrollmentSearch';
+import { formatVNDate } from '../../utils/DateTimeUtils';
 
 export default function EnrollmentList() {
   const [enrollmentList, setEnrollmentList] = useState<IEnrollment[]>([]);
@@ -95,6 +96,7 @@ export default function EnrollmentList() {
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={enrollmentList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
               <Table.Column title='Student Name' dataIndex={['student', 'name']} />
               <Table.Column title='Course Name' dataIndex={['course', 'name']} />
+              <Table.Column title='Start date' dataIndex='startDate' render={(_date: Date) => formatVNDate(_date)} />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? <Tag color='success'>Yes</Tag> : <Tag color='error'>No</Tag>} />
               <Table.Column

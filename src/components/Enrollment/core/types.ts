@@ -7,6 +7,7 @@ export interface IEnrollment {
   course: ICourse,
   student: IStudent,
   date: string,
+  startDate?: string,
   active?: true,
   sendNotification?: true
 }
