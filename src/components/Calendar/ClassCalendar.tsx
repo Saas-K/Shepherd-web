@@ -43,6 +43,7 @@ export default function ClassCalendar() {
   const [viewDate, setViewDate] = useState<Date[]>(); // [start, end]
   const [originalClass, setOriginalClass] = useState<IDayClassInfo>();
   const [pendingAlt, setPendingAlt] = useState<IDayClassInfo>();
+  const [currenDate, setCurrentDate] = useState<Date>(new Date());
 
   useEffect(() => {
     const now: Date = new Date();
@@ -159,6 +160,10 @@ export default function ClassCalendar() {
   const handleAltSubmit = () => {
     let _pendingAltClassParts: number[] | null;
     if (pendingAlt) {
+      if (pendingAlt.date) {
+        setCurrentDate(new Date(pendingAlt.date));
+      }
+
       service.createAltDay(pendingAlt)
       .then((data: any) => {
         setLoading(true);
@@ -251,9 +256,12 @@ export default function ClassCalendar() {
   }
 
   const handleToggleCancelSubmit = () => {
-    console.log(selectedClass);
     if (selectedClass) {
       const _parsedId = selectedClass.id?.split('-')[3];
+      if (selectedClass.date) {
+        setCurrentDate(new Date(selectedClass.date));
+      }
+
       service.toggleCancelClass({
         mainDayClassId: selectedClass?.mainDayClassDate ? selectedClass.mainDayClassId : _parsedId,
         mainDayClassDate: selectedClass?.mainDayClassDate || selectedClass?.date,
@@ -349,6 +357,7 @@ export default function ClassCalendar() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek'
           }}
+          initialDate={currenDate}
           initialView='timeGridWeek'
           editable
           selectable
