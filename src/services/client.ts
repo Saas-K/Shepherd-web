@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import queryString from 'query-string';
+import { STORAGE_ACCESS_TOKEN } from '../components/_common/core/constants';
 
 function _getAuthHeader() {
   return {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      'Authorization': `Bearer ${localStorage.getItem(STORAGE_ACCESS_TOKEN)}`
     }
   };
 }

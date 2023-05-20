@@ -4,6 +4,7 @@ import { Table, PageHeader, Card, message, Space, Typography, Button, Form, Inpu
 
 import * as service from './core/service';
 import { ILogin, ILoginResponse } from './core/types';
+import { STORAGE_ACCESS_TOKEN, STORAGE_MOBILE, STORAGE_REFRESH_TOKEN, STORAGE_USERNAME } from '../_common/core/constants';
 
 export default function Login({ getAccess }: { getAccess: () => unknown }) {
   const history = useHistory();
@@ -12,16 +13,16 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
     service
     .login(body)
     .then((res: ILoginResponse) => {
-      localStorage.setItem('username', res.username)
-      localStorage.setItem('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      localStorage.setItem('mobile', `${res.mobile}`);
+      localStorage.setItem(STORAGE_USERNAME, res.username)
+      localStorage.setItem(STORAGE_ACCESS_TOKEN, res.accessToken);
+      localStorage.setItem(STORAGE_REFRESH_TOKEN, res.refreshToken);
+      localStorage.setItem(STORAGE_MOBILE, `${res.mobile}`);
     })
     .catch((error) => {
       message.error(error.message);
     })
     .finally(() => {
-      if (localStorage.getItem('accessToken')) {
+      if (localStorage.getItem(STORAGE_ACCESS_TOKEN)) {
         history.push('/course');
       }
       getAccess();
