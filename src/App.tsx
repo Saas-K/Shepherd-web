@@ -5,10 +5,12 @@ import './Tailwind.css';
 import React, { ReactElement, useState } from 'react';
 import { Layout } from 'antd';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { decodeJwt, JWTPayload } from 'jose';
 
 import routes from './_routes';
 import Login from './components/Auth/Login';
 import MenuBar from './components/_common/MenuBar';
+import { STORAGE_ACCESS_TOKEN, STORAGE_USERNAME } from './components/_common/core/constants';
 
 const { Content, Footer } = Layout;
 
@@ -16,7 +18,26 @@ function App() {
   const [update, setUpdate] = useState<boolean>(false);
 
   function isValidAccess() {
-    return !!localStorage.getItem('username') && !!localStorage.getItem('accessToken');
+    const accessToken: string | null = localStorage.getItem(STORAGE_ACCESS_TOKEN);
+    const username: string | null = localStorage.getItem(STORAGE_USERNAME);
+    if (!accessToken || !username) {
+      console.log('fuck 1');
+      return false;
+    }
+    
+    if (accessToken) {
+      const decodedToken: JWTPayload = decodeJwt(accessToken);
+      if (decodedToken && decodedToken.exp) {
+        console.log('fuck 2');
+
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const expirationTime = decodedToken.exp;
+        console.log(currentTimestamp);
+        console.log(expirationTime);
+        return currentTimestamp <= expirationTime;
+      }
+    }
+    return false;
   }
 
   function triggerUpdate() {
