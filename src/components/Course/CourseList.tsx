@@ -16,6 +16,8 @@ import * as misc from '../../utils/Misc';
 import CourseSearch from './CourseSearch';
 import { currency } from '../../utils/StringUtils';
 import { formatVNDate } from '../../utils/DateTimeUtils';
+import { STORAGE_MOBILE } from '../_common/core/constants';
+import CourseSearchMobile from './CourseSearchMobile';
 
 export default function CourseList() {
   const [courseList, setCourseList] = useState<ICourse[]>([]);
@@ -82,13 +84,20 @@ export default function CourseList() {
   return (
     <>
       <PageHeader className='site-page-header' title='Courses' extra={_renderExtra()} />
-      <CourseSearch
+      {localStorage.getItem(STORAGE_MOBILE) === 'true' ? 
+      <CourseSearchMobile 
         filter={query}
         onSearch={(values: ICourseFilter) => {
           misc.changeBrowserLocation(history, pathname, values);
           fetchData(values);
         }}
-      />
+      /> : <CourseSearch
+        filter={query}
+        onSearch={(values: ICourseFilter) => {
+          misc.changeBrowserLocation(history, pathname, values);
+          fetchData(values);
+        }}
+      />}
       {loading ? (
         <ComponentLoading />
       ) : (
@@ -107,6 +116,7 @@ export default function CourseList() {
                 render={(_value: string, record: ICourse) => {
                   return _renderAction(record);
                 }}
+                fixed='right'
               />
             </Table>
           </Card>

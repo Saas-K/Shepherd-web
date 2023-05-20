@@ -13,6 +13,8 @@ import { IStudent, IStudentFilter } from './core/types';
 import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import StudentSearch from './StudentSearch';
+import StudentSearchMobile from './StudentSearchMobile';
+import { STORAGE_MOBILE } from '../_common/core/constants';
 
 export default function StudentList() {
   const [studentList, setStudentList] = useState<IStudent[]>([]);
@@ -79,13 +81,20 @@ export default function StudentList() {
   return (
     <>
       <PageHeader className='site-page-header' title='Students' extra={_renderExtra()} />
-      <StudentSearch
+      {localStorage.getItem(STORAGE_MOBILE) === 'true' ? 
+      <StudentSearchMobile
         filter={query}
         onSearch={(values: IStudentFilter) => {
           misc.changeBrowserLocation(history, pathname, values);
           fetchData(values);
         }}
-      />
+      /> : <StudentSearch
+        filter={query}
+        onSearch={(values: IStudentFilter) => {
+          misc.changeBrowserLocation(history, pathname, values);
+          fetchData(values);
+        }}
+      />}
       {loading ? (
         <ComponentLoading />
       ) : (
@@ -103,6 +112,7 @@ export default function StudentList() {
                 render={(_value: string, record: IStudent) => {
                   return _renderAction(record);
                 }}
+                fixed='right'
               />
             </Table>
           </Card>

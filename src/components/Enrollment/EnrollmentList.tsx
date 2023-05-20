@@ -14,6 +14,8 @@ import { IPageResponse } from '../_common/core/types';
 import * as misc from '../../utils/Misc';
 import EnrollmentSearch from './EnrollmentSearch';
 import { formatVNDate } from '../../utils/DateTimeUtils';
+import EnrollmentSearchMobile from './EnrollmentSearchMobile';
+import { STORAGE_MOBILE } from '../_common/core/constants';
 
 export default function EnrollmentList() {
   const [enrollmentList, setEnrollmentList] = useState<IEnrollment[]>([]);
@@ -80,13 +82,20 @@ export default function EnrollmentList() {
   return (
     <>
       <PageHeader className='site-page-header' title='Enrollments' extra={_renderExtra()} />
-      <EnrollmentSearch
+      {localStorage.getItem(STORAGE_MOBILE) === 'true' ? 
+      <EnrollmentSearchMobile 
         filter={query}
         onSearch={(values: IEnrollmentFilter) => {
           misc.changeBrowserLocation(history, pathname, values);
           fetchData(values);
         }}
-      />
+      /> : <EnrollmentSearch
+        filter={query}
+        onSearch={(values: IEnrollmentFilter) => {
+          misc.changeBrowserLocation(history, pathname, values);
+          fetchData(values);
+        }}
+      />}
       {loading ? (
         <ComponentLoading />
       ) : (
@@ -104,6 +113,7 @@ export default function EnrollmentList() {
                 render={(_value: string, record: IEnrollment) => {
                   return _renderAction(record);
                 }}
+                fixed='right'
               />
             </Table>
           </Card>

@@ -15,6 +15,8 @@ import * as misc from '../../utils/Misc';
 import PaymentSearch from './PaymentSearch';
 import { currency } from '../../utils/StringUtils';
 import { formatVNDate } from '../../utils/DateTimeUtils';
+import { STORAGE_MOBILE } from '../_common/core/constants';
+import PaymentSearchMobile from './PaymentSearchMobile';
 
 export default function PaymentList() {
   const [paymentList, setPaymentList] = useState<IPayment[]>([]);
@@ -81,13 +83,21 @@ export default function PaymentList() {
   return (
     <>
       <PageHeader className='site-page-header' title='Payments' extra={_renderExtra()} />
-      <PaymentSearch
-        filter={query}
-        onSearch={(values: IPaymentFilter) => {
-          misc.changeBrowserLocation(history, pathname, values);
-          fetchData(values);
-        }}
-      />
+      {localStorage.getItem(STORAGE_MOBILE) === 'true' ? 
+        <PaymentSearchMobile
+          filter={query}
+          onSearch={(values: IPaymentFilter) => {
+            misc.changeBrowserLocation(history, pathname, values);
+            fetchData(values);
+          }}
+        /> : <PaymentSearch
+          filter={query}
+          onSearch={(values: IPaymentFilter) => {
+            misc.changeBrowserLocation(history, pathname, values);
+            fetchData(values);
+          }}
+        />
+      }
       {loading ? (
         <ComponentLoading />
       ) : (
@@ -107,6 +117,7 @@ export default function PaymentList() {
                 render={(_value: string, record: IPayment) => {
                   return _renderAction(record);
                 }}
+                fixed='right'
               />
             </Table>
           </Card>
