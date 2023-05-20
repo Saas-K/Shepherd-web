@@ -15,6 +15,7 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
       localStorage.setItem('username', res.username)
       localStorage.setItem('accessToken', res.accessToken);
       localStorage.setItem('refreshToken', res.refreshToken);
+      localStorage.setItem('mobile', `${res.mobile}`);
     })
     .catch((error) => {
       message.error(error.message);

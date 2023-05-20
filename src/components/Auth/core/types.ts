@@ -6,5 +6,6 @@ export interface ILogin {
 export interface ILoginResponse {
   username: string,
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
+  mobile: boolean
 }
