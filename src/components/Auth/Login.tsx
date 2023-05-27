@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button, Form, Input } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { message, Button, Form, Input } from 'antd';
 
 import * as service from './core/service';
 import { ILogin, ILoginResponse } from './core/types';
 import { STORAGE_ACCESS_TOKEN, STORAGE_MOBILE, STORAGE_REFRESH_TOKEN, STORAGE_USERNAME } from '../_common/core/constants';
 
-export default function Login({ getAccess }: { getAccess: () => unknown }) {
+export default function Login() {
   const history = useHistory();
 
   function loginRequest(body: ILogin) {
@@ -24,8 +24,8 @@ export default function Login({ getAccess }: { getAccess: () => unknown }) {
     .finally(() => {
       if (localStorage.getItem(STORAGE_ACCESS_TOKEN)) {
         history.push('/course');
+        history.go(0);
       }
-      getAccess();
     });
   }
 
