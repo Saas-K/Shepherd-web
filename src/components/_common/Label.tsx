@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Label = ({ title, required, className }: { title: string; required?: boolean; className?: string }) => {
   return (
     <div className='w-full' style={{ lineHeight: 2.3 }}>

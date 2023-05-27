@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch } from 'antd';
-import moment from 'moment';
+import { PageHeader, Card, Form, Input, Button, message, Row, Col, Switch } from 'antd';
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
 import * as service from './core/service';
 import { IStudent } from "./core/types";
 import Label from "../_common/Label";
-import config from '../../_config';
 
 export default function StudentViewEdit() {
   const [form] = Form.useForm();
@@ -57,11 +55,10 @@ export default function StudentViewEdit() {
     };
 
     try {
-      let response: any;
       if (id) {
-        response = await service.updateStudent(id, body);
+        await service.updateStudent(id, body);
       } else {
-        response = await service.createStudent(body);
+        await service.createStudent(body);
       }
       goBack();
     } catch (error: any) {

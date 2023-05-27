@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch } from 'antd';
+import { PageHeader, Card, Form, Select, Button, message, Row, Col, DatePicker, Switch } from 'antd';
 import moment from 'moment';
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
@@ -9,7 +9,6 @@ import * as courseService from '../Course/core/service';
 import * as studentService from '../Student/core/service';
 import { IEnrollment } from "./core/types";
 import Label from "../_common/Label";
-import config from '../../_config';
 import { ICourse } from "../Course/core/types";
 import { IPageResponse } from "../_common/core/types";
 import { IStudent } from "../Student/core/types";
@@ -54,7 +53,7 @@ export default function EnrollmentViewEdit() {
     });
   }
 
-  const fetchAllActiveCourses = () => {
+  function fetchAllActiveCourses() {
     courseService
     .getAllActiveCourses()
     .then((data: IPageResponse<ICourse>) => {
@@ -65,7 +64,7 @@ export default function EnrollmentViewEdit() {
     });
   }
 
-  const fetchAllActiveStudents = () => {
+  function fetchAllActiveStudents() {
     studentService
     .getAllActiveStudents()
     .then((data: IPageResponse<IStudent>) => {
@@ -90,11 +89,10 @@ export default function EnrollmentViewEdit() {
     };
 
     try {
-      let response: any;
       if (id) {
-        response = await service.updateEnrollment(id, body);
+        await service.updateEnrollment(id, body);
       } else {
-        response = await service.createEnrollment(body);
+        await service.createEnrollment(body);
       }
       goBack();
     } catch (error: any) {

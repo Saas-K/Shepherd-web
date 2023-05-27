@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch } from 'antd';
+import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, Switch } from 'antd';
 import moment from 'moment';
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
@@ -18,7 +18,6 @@ export default function PaymentViewEdit() {
   const { pathname } = useLocation();
   const { id }: any = useParams();
   const [enrollments, setEnrollments] = useState<IEnrollment[]>([]);
-  const [selectedEnrollment, setSelectedEnrollment] = useState<IEnrollment>();
 
   let action = CREATE_ACTION;
   if (id) {
@@ -54,7 +53,7 @@ export default function PaymentViewEdit() {
     });
   }
 
-  const fetchAllEnrollments = () => {
+  function fetchAllEnrollments() {
     enrollmentService
     .getAllEnrollments()
     .then((data: IPageResponse<IEnrollment>) => {
@@ -71,7 +70,6 @@ export default function PaymentViewEdit() {
 
   const onFinish = async (values: IPayment) => {
     try {
-      console.log(action);
       if (action === CREATE_ACTION && values.enrollment) {
         const body: IPayment = {
           enrollment: JSON.parse(values.enrollment),

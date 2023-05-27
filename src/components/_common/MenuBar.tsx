@@ -12,7 +12,7 @@ import {
 
 export default function MenuBar() {
   const history = useHistory();
-  const [menuItems, setMenuItemsState] = useState<any[]>([
+  const [menuItems,] = useState<any[]>([
     {
       key: 'course',
       path: '/course',

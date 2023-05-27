@@ -1,4 +1,5 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Switch } from 'antd';
+import React from 'react';
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 
 import { IPaymentFilter } from './core/types';

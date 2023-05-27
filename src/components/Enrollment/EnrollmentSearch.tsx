@@ -1,5 +1,5 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Switch } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import React from 'react';
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 
 import { IEnrollmentFilter } from './core/types';

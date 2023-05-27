@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Badge, Button, Card, Col, DatePicker, Form, Input, Modal, Select } from 'antd';
+import { Avatar, Badge, Button, Col, DatePicker, Form, Input, Modal, Select } from 'antd';
 import moment from 'moment';
 import { FilterOutlined } from '@ant-design/icons';
 

@@ -6,11 +6,10 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import ComponentLoading from '../_common/ComponentLoading';
 
-import { IDayClassInfo, IFullCalendarEvent, IClassSlot, IClassMeta } from './core/types';
+import { IDayClassInfo, IFullCalendarEvent } from './core/types';
 import * as service from './core/service';
-import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
+import { omitTimeSeconds } from '../../utils/StringUtils';
 import { 
-  getWeekDatesFormatted, 
   getFullCalendarTime, 
   getWeekDayName, 
   getWeekDayNow, 
@@ -25,7 +24,6 @@ import {
 
 export default function ClassCalendar() {
   const calendarRef: any = useRef(null);
-  const UPDATE = 'Update';
   
   const [loading, setLoading] = useState(true);
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false); 
@@ -39,7 +37,7 @@ export default function ClassCalendar() {
    */
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedClass, setSelectedClass] = useState<IDayClassInfo>();
-  const [currentMonth, setCurrentMonth] = useState<string>('');
+  const [, setCurrentMonth] = useState<string>('');
   const [viewDate, setViewDate] = useState<Date[]>(); // [start, end]
   const [originalClass, setOriginalClass] = useState<IDayClassInfo>();
   const [pendingAlt, setPendingAlt] = useState<IDayClassInfo>();
@@ -59,7 +57,7 @@ export default function ClassCalendar() {
     populateClasses();
   }, [datesInfo]);
 
-  const fetchData = (beginYear: number, beginMonth: number, endYear: number, endMonth: number) => {
+  function fetchData(beginYear: number, beginMonth: number, endYear: number, endMonth: number) {
     service
     .getDays(beginYear, beginMonth, endYear, endMonth)
     .then((data: any) => {
@@ -77,7 +75,7 @@ export default function ClassCalendar() {
     })
   }
 
-  const populateClasses = (): void => {
+  function populateClasses(): void {
     const _classes: IFullCalendarEvent[] = [];
     let i = 0;
     for (const value of Object.values(datesInfo) as Map<string, any>[]) {
@@ -95,7 +93,7 @@ export default function ClassCalendar() {
     setClasses([..._classes]);
   }
 
-  const toFullCalendarEvent = (id: string, date: string, dayClass: IDayClassInfo): IFullCalendarEvent => {
+  function toFullCalendarEvent(id: string, date: string, dayClass: IDayClassInfo): IFullCalendarEvent {
     return {
       id,
       title: dayClass.courseName,
@@ -139,7 +137,7 @@ export default function ClassCalendar() {
     }
   }
 
-  const getOriginalClassInfo = (id: string): IDayClassInfo | null => {
+  function getOriginalClassInfo(id: string): IDayClassInfo | null {
     const _parts: string[] = id.split('-');
     const _year = _parts[0];
     const _month = _parts[1];

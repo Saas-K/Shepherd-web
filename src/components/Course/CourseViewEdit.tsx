@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch, Tag } from 'antd';
 import moment from 'moment';
@@ -62,11 +62,10 @@ export default function CourseViewEdit() {
     };
 
     try {
-      let response: any;
       if (id) {
-        response = await service.updateCourse(id, body);
+        await service.updateCourse(id, body);
       } else {
-        response = await service.createCourse(body);
+        await service.createCourse(body);
       }
       goBack();
     } catch (error: any) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, message, Select, Collapse, Button, Row, Space, Tag } from 'antd';
+import { Modal, message, Select, Collapse, Button, Space } from 'antd';
 import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, EventChangeArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -9,10 +9,9 @@ import moment from 'moment';
 import { IMainDay, IFullCalendarEvent, IClassSlot } from './core/types';
 import * as service from './core/service';
 import * as courseService from '../Course/core/service';
-import { numberPadLeft, omitTimeSeconds } from '../../utils/StringUtils';
+import { omitTimeSeconds } from '../../utils/StringUtils';
 import { getWeekDatesFormatted, getFullCalendarTime, getWeekDayName, getWeekDayNow, getDate } from '../../utils/DateTimeUtils';
 import ComponentLoading from '../_common/ComponentLoading';
-import { colorsList } from '../../utils/Colors';
 import { IPageResponse } from '../_common/core/types';
 import { ICourse } from '../Course/core/types';
 
@@ -25,7 +24,6 @@ export default function ClassSchedule() {
   const [isEventEditVisible, setIsEventEditVisible] = useState<boolean>(false);
   const [classes, setClasses] = useState<IFullCalendarEvent[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
-  const [mainDayClass, setMainDayClass] = useState<IMainDay>();
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [editMode, setEditMode] = useState<string>(CREATE);
 
@@ -34,7 +32,7 @@ export default function ClassSchedule() {
     fetchAllActiveCourses();
   }, []);
 
-  const fetchData = () => {
+  function fetchData() {
     service
     .getMainDays()
     .then((data: IMainDay[]) => {
@@ -50,7 +48,7 @@ export default function ClassSchedule() {
     .finally(() => {setLoading(false)});
   }
 
-  const toFullCalendarEvent = (_class: IMainDay): IFullCalendarEvent => {
+  function toFullCalendarEvent(_class: IMainDay): IFullCalendarEvent {
     return {
       id: _class.id,
       title: _class.courseName,
@@ -68,7 +66,7 @@ export default function ClassSchedule() {
     };
   }
 
-  const fetchAllActiveCourses = () => {
+  function fetchAllActiveCourses() {
     courseService
     .getAllActiveCourses()
     .then((data: IPageResponse<ICourse>) => {

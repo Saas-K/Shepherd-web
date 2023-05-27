@@ -43,7 +43,6 @@ export function getFullCalendarTime(now: string | undefined): string {
 }
 
 export function getFullCalendarDate(now: string | undefined): string {
-  console.log(now);
   if (now === undefined) return '';
   return now.substring(0, 10);
 }

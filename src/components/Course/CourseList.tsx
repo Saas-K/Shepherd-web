@@ -6,7 +6,6 @@ import {
   EyeOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-import moment from 'moment';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
