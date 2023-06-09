@@ -81,7 +81,7 @@ export default function CourseViewEdit() {
   return (
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
-      <section className='mr-24'>
+      <section>
         <Form className='form-create-campaign' form={form} layout='vertical' onFinish={onFinish}>
           <Card title='Course' className='mb-6'>
             <Form.Item

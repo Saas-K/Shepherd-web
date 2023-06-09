@@ -118,7 +118,7 @@ export default function PaymentViewEdit() {
   return (
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
-      <section className='mr-24'>
+      <section>
         <Form className='form-create-campaign' form={form} layout='vertical' 
           onFinish={onFinish}>
           <Card title='Enrollment' className='mb-6'>
