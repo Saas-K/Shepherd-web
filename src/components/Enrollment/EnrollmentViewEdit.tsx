@@ -175,30 +175,24 @@ export default function EnrollmentViewEdit() {
                 {_renderCourseOptions()}
               </Select>
             </Form.Item>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='date'
-                label={<Label title='Date' required/>}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Date is required',
-                  },
-                ]}
-              >
-                <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION}/>
-              </Form.Item>
-            </Col>
-            <Col span={6} className='pdr-12'>
-              <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
-                <Switch disabled={action === VIEW_ACTION} defaultChecked />
-              </Form.Item>
-            </Col>
-            <Col span={6} className='pdr-12'>
-              <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-                <Switch disabled={action === VIEW_ACTION} defaultChecked />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name='date'
+              label={<Label title='Date' required/>}
+              rules={[
+                {
+                  required: true,
+                  message: 'Date is required',
+                },
+              ]}
+            >
+              <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION}/>
+            </Form.Item>
+            <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
+              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            </Form.Item>
+            <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
+              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            </Form.Item>
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (

@@ -177,7 +177,7 @@ export default function PaymentViewEdit() {
                 },
               ]}
             >
-              <Input disabled={action !== CREATE_ACTION} />
+              <Input type='number' disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='date'
@@ -197,19 +197,15 @@ export default function PaymentViewEdit() {
             >
               <DatePicker placeholder='Select date' disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='paid'
-                label={<Label title='Paid' />}
-              >
-                <Input disabled={action === VIEW_ACTION} />
-              </Form.Item>
-            </Col>
-            <Col span={6} className='pdr-12'>
-              <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
-                <Switch disabled={action === VIEW_ACTION} defaultChecked />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name='paid'
+              label={<Label title='Paid' />}
+            >
+              <Input type='number' disabled={action === VIEW_ACTION} />
+            </Form.Item>
+            <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
+              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            </Form.Item>
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (

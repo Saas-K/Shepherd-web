@@ -96,34 +96,30 @@ export default function CourseViewEdit() {
             >
               <Input disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='pricePerClass'
-                label={<Label title='Price (per class)' required />}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Price is required',
-                  },
-                ]}
-              >
-                <InputNumber min={0} disabled={action === VIEW_ACTION} />
-              </Form.Item>
-            </Col>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='classPerWeek'
-                label={<Label title='Classes (per week)' required />}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Classes is required',
-                  },
-                ]}
-              >
-                <InputNumber min={0} disabled={action === VIEW_ACTION} />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name='pricePerClass'
+              label={<Label title='Price (per class)' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Price is required',
+                },
+              ]}
+            >
+              <InputNumber type='number' min={0} disabled={action === VIEW_ACTION} />
+            </Form.Item>
+            <Form.Item
+              name='classPerWeek'
+              label={<Label title='Classes (per week)' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Classes is required',
+                },
+              ]}
+            >
+              <InputNumber type='number' min={0} disabled={action === VIEW_ACTION} />
+            </Form.Item>
             <Form.Item
               name='description'
               label={<Label title='Description' required />}
@@ -136,27 +132,21 @@ export default function CourseViewEdit() {
             >
               <Input.TextArea disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Row>
-              <Col span={6} className='pdr-12'>
-                <Form.Item
-                  name='startDate'
-                  label={<Label title='Start date' required />}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Start date is required',
-                    },
-                  ]}
-                >
-                  <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION} />
-                </Form.Item>
-              </Col>
-              <Col span={6} className='pdr-12'>
-                <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-                  <Switch disabled={action === VIEW_ACTION} />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              name='startDate'
+              label={<Label title='Start date' required />}
+              rules={[
+                {
+                  required: true,
+                  message: 'Start date is required',
+                },
+              ]}
+            >
+              <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION} />
+            </Form.Item>
+            <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
+              <Switch disabled={action === VIEW_ACTION} />
+            </Form.Item>
             <Form.Item
               name='color'
               label={<Label title='Color' required />}

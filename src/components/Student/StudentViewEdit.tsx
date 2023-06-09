@@ -89,35 +89,27 @@ export default function StudentViewEdit() {
             >
               <Input disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='mobile'
-                label={<Label title='Mobile' />}
-              >
-                <Input disabled={action === VIEW_ACTION} />
-              </Form.Item>
-            </Col>
-            <Col span={6} className='pdr-12'>
-              <Form.Item
-                name='parentMobile'
-                label={<Label title='Parent mobile' />}
-              >
-                <Input disabled={action === VIEW_ACTION} />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name='mobile'
+              label={<Label title='Mobile' />}
+            >
+              <Input disabled={action === VIEW_ACTION} />
+            </Form.Item>
+            <Form.Item
+              name='parentMobile'
+              label={<Label title='Parent mobile' />}
+            >
+              <Input disabled={action === VIEW_ACTION} />
+            </Form.Item>
             <Form.Item
               name='note'
               label={<Label title='Note' />}
             >
               <Input.TextArea disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Row>
-              <Col span={6} className='pdr-12'>
-                <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-                  <Switch disabled={action === VIEW_ACTION} defaultChecked />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
+              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            </Form.Item>
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
