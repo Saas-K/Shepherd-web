@@ -9,12 +9,14 @@ import { ICourse } from "./core/types";
 import Label from "../_common/Label";
 import config from '../../_config';
 import { colorsList } from '../../utils/Colors';
+import { currency } from "../../utils/StringUtils";
 
 export default function CourseViewEdit() {
   const [form] = Form.useForm();
   const history = useHistory();
   const { pathname } = useLocation();
   const { id }: any = useParams();
+  const pricePerClass = Form.useWatch('pricePerClass', form) || '0';
 
   let action = CREATE_ACTION;
   if (id) {
@@ -98,7 +100,7 @@ export default function CourseViewEdit() {
             </Form.Item>
             <Form.Item
               name='pricePerClass'
-              label={<Label title='Price (per class)' required />}
+              label={<span><Label title='Price (per class)' required /><Label className='currency-label' title={`${currency(pricePerClass)} VND`}/></span>}
               rules={[
                 {
                   required: true,

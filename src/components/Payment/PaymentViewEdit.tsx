@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, Switch } from 'antd';
+import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, Switch, FormListFieldData } from 'antd';
 import moment from 'moment';
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
@@ -11,6 +11,7 @@ import Label from "../_common/Label";
 import config from '../../_config';
 import { IPageResponse } from "../_common/core/types";
 import { IEnrollment } from "../Enrollment/core/types";
+import { currency } from "../../utils/StringUtils";
 
 export default function PaymentViewEdit() {
   const [form] = Form.useForm();
@@ -18,6 +19,8 @@ export default function PaymentViewEdit() {
   const { pathname } = useLocation();
   const { id }: any = useParams();
   const [enrollments, setEnrollments] = useState<IEnrollment[]>([]);
+  const price = Form.useWatch<string>('price', form) || '0';
+  const paid = Form.useWatch<string>('paid', form) || '0';
 
   let action = CREATE_ACTION;
   if (id) {
@@ -169,7 +172,7 @@ export default function PaymentViewEdit() {
             </Form.Item>
             <Form.Item
               name='price'
-              label={<Label title='Price' required />}
+              label={<span><Label title='Price' required /><Label className='currency-label' title={`${currency(price)} VND`} /></span>}
               rules={[
                 {
                   required: true,
@@ -177,7 +180,7 @@ export default function PaymentViewEdit() {
                 },
               ]}
             >
-              <Input type='number' disabled={action !== CREATE_ACTION} />
+              <Input type='number' min={0} disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
               name='date'
@@ -199,7 +202,7 @@ export default function PaymentViewEdit() {
             </Form.Item>
             <Form.Item
               name='paid'
-              label={<Label title='Paid' />}
+              label={<span><Label title='Paid' required /><Label className='currency-label' title={`${currency(paid)} VND`} /></span>}
             >
               <Input type='number' disabled={action === VIEW_ACTION} />
             </Form.Item>
