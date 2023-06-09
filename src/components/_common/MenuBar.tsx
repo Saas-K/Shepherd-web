@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Button, Divider, Dropdown, Menu } from 'antd';
+import { Button, Collapse, Divider, Dropdown, Menu } from 'antd';
 import {
   CalendarOutlined,
   ReadOutlined,
@@ -9,6 +9,7 @@ import {
   DollarCircleOutlined,
   MenuOutlined,
 } from '@ant-design/icons';
+import CollapsePanel from 'antd/lib/collapse/CollapsePanel';
 
 export default function MenuBar() {
   const history = useHistory();
@@ -60,24 +61,18 @@ export default function MenuBar() {
   const renderMenuItem = (item: any) => {
     if (item.children) {
       return (
-        <Menu.Item key={item.key} icon={item.icon} title={item.title}>
-          <Dropdown
-            overlay={
-              <Menu className='sidebar__menu'>
-                {item.children.map((childItem: any) => (
-                  <Menu.Item key={childItem.key}>
-                    <span className='menu_text'>{childItem.title}</span>
-                    <Link to={childItem.path} title={childItem.title} />
-                  </Menu.Item>
-                ))}
-              </Menu>
-            }
-          >
-            <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-              Time
-            </a>
-          </Dropdown>
-        </Menu.Item>
+        <Collapse ghost expandIcon={() => item.icon}>
+          <CollapsePanel className='o_parent_menu_text' header={item.title} key={item.key}>
+            <Menu className='sidebar__menu'>
+              {item.children.map((childItem: any) => (
+                <Menu.Item key={childItem.key}>
+                  <span className='o_menu_text'>{childItem.title}</span>
+                  <Link className='o_menu_text' to={childItem.path} title={childItem.title} />
+                </Menu.Item>
+              ))}
+            </Menu>
+          </CollapsePanel>
+        </Collapse>
       );
     }
   

@@ -157,6 +157,23 @@ ul,
 li {
   list-style-type: none;
 }
+.o_parent_menu_text {
+  .ant-collapse-header {
+    padding-top: 5px !important;
+    padding-left: 12px !important;
+    color: #1a1818;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .ant-collapse-content-box {
+    padding-top: 0 !important;
+  }
+}
+.o_menu_text {
+  color: #1a1818;
+  font-weight: 500;
+  font-size: 15px;
+}
 .sidebar__menu {
   .ant-menu {
     background: none;
@@ -173,10 +190,10 @@ li {
   }
   .ant-menu-item:active,
   .ant-menu-submenu-title:active {
-    background: #3899b1;
+    background: white;
   }
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: #3899b1;
+    background-color: white;
   }
   .ant-menu-vertical .ant-menu-item::after,
   .ant-menu-vertical-left .ant-menu-item::after,
