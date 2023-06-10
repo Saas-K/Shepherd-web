@@ -93,7 +93,7 @@ export default function EnrollmentList() {
               <Table.Column
                 title=''
                 render={(_value: string, record: IEnrollment) => {
-                  return renderActions(`/enrollment/${record.id}`);
+                  return renderActions(`/enrollment/${record.id}`, !record.active);
                 }}
                 fixed='right'
               />

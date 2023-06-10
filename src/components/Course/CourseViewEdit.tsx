@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch, Tag } from 'antd';
+import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch, Tag, Modal } from 'antd';
 import moment from 'moment';
+import { WarningOutlined } from "@ant-design/icons";
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
 import * as service from './core/service';
@@ -52,15 +53,15 @@ export default function CourseViewEdit() {
     history.push('/course');
   };
 
-  const onFinish = async (values: ICourse) => {
+  const handleConfirmModalOk = async () => {
     const body: ICourse = {
-      name: values.name,
-      startDate: moment(values.startDate).format(config.API_DATE_FORMAT),
-      active: values.active,
-      pricePerClass: values.pricePerClass,
-      classPerWeek: values.classPerWeek,
-      description: values.description,
-      color: values.color
+      name: form.getFieldValue('name'),
+      startDate: moment(form.getFieldValue('startDate')).format(config.API_DATE_FORMAT),
+      active: form.getFieldValue('active'),
+      pricePerClass: form.getFieldValue('pricePerClass'),
+      classPerWeek: form.getFieldValue('classPerWeek'),
+      description: form.getFieldValue('description'),
+      color: form.getFieldValue('color')
     };
 
     try {
@@ -80,11 +81,28 @@ export default function CourseViewEdit() {
     return action === UPDATE_ACTION ? 'Edit Course' : 'View Course';
   };
 
+  const _renderConfirmModal = () => {
+    if (form.getFieldValue('active')) {
+      handleConfirmModalOk();
+    } else {
+      Modal.confirm({
+        icon: <WarningOutlined />,
+        title: 'WARNING, DEACTIVATING COURSE',
+        content: <>
+        <div>Course: {form.getFieldValue('name')}</div>
+        <div>Once deactivated, this action cannot be undone.</div>
+        <div>Are you sure to continue?</div>
+        </>,
+        onOk: handleConfirmModalOk,
+      });
+    }
+  }
+
   return (
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
       <section>
-        <Form className='form-create-campaign' form={form} layout='vertical' onFinish={onFinish}>
+        <Form className='form-create-campaign' form={form} layout='vertical'>
           <Card title='Course' className='mb-6'>
             <Form.Item
               name='name'
@@ -146,8 +164,8 @@ export default function CourseViewEdit() {
             >
               <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION} />
             </Form.Item>
-            <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-              <Switch disabled={action === VIEW_ACTION} />
+            <Form.Item name='active' valuePropName='checked' initialValue={form.getFieldValue('active') || true} label={<Label title='Active' />}>
+              <Switch disabled={action === VIEW_ACTION} checked={form.getFieldValue('active')} />
             </Form.Item>
             <Form.Item
               name='color'
@@ -176,7 +194,7 @@ export default function CourseViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit'>
+                  <Button type='primary' htmlType='submit' onClick={_renderConfirmModal}>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

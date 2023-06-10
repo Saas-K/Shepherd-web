@@ -95,7 +95,7 @@ export default function CourseList() {
               <Table.Column
                 title=''
                 render={(_value: string, record: ICourse) => {
-                  return renderAction(`/course/${record.id}`);
+                  return renderAction(`/course/${record.id}`, !record.active);
                 }}
                 fixed='right'
               />

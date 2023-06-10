@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { PageHeader, Card, Form, Select, Button, message, Row, Col, DatePicker, Switch } from 'antd';
+import { PageHeader, Card, Form, Select, Button, message, Row, Col, DatePicker, Switch, Modal, Input } from 'antd';
 import moment from 'moment';
+import { WarningOutlined } from "@ant-design/icons";
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
 import * as service from './core/service';
@@ -12,6 +13,7 @@ import Label from "../_common/Label";
 import { ICourse } from "../Course/core/types";
 import { IPageResponse } from "../_common/core/types";
 import { IStudent } from "../Student/core/types";
+import ComponentLoading from "../_common/ComponentLoading";
 
 const { Option } = Select;
 
@@ -22,6 +24,7 @@ export default function EnrollmentViewEdit() {
   const { id }: any = useParams();
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [students, setStudents] = useState<IStudent[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -35,7 +38,10 @@ export default function EnrollmentViewEdit() {
   }, []);
 
   function fetchData() {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    };
     service
     .getEnrollment(id)
     .then((res: IEnrollment) => {
@@ -50,6 +56,9 @@ export default function EnrollmentViewEdit() {
     })
     .catch((error) => {
       message.error(error.message);
+    })
+    .finally(() => {
+      setLoading(false);
     });
   }
 
@@ -78,16 +87,16 @@ export default function EnrollmentViewEdit() {
   const goBack = () => {
     history.push('/enrollment');
   };
-
-  const onFinish = async (values: any) => {
+  
+  const handleConfirmModalOk = async () => {
     const body: IEnrollment = {
-      course: JSON.parse(values.course),
-      student: JSON.parse(values.student),
-      date: values.date,
-      active: values.active,
-      sendNotification: values.sendNotification
+      course: JSON.parse(form.getFieldValue('course')),
+      student: JSON.parse(form.getFieldValue('student')),
+      date: form.getFieldValue('date'),
+      active: form.getFieldValue('active'),
+      sendNotification: form.getFieldValue('sendNotification')
     };
-
+  
     try {
       if (id) {
         await service.updateEnrollment(id, body);
@@ -99,11 +108,16 @@ export default function EnrollmentViewEdit() {
       message.error(error.message);
     }
   };
-
+  
   const getHeader = () => {
     if (!id) return 'Create Enrollment';
     return action === UPDATE_ACTION ? 'Edit Enrollment' : 'View Enrollment';
   };
+
+  const getStudentDisplay = () => {
+    const _student = JSON.parse(form.getFieldValue('student'));
+    return `${_student.name} ${_student.mobile || ''} ${_student.parentMobile || ''}`;
+  }
 
   const _renderStudentOptions = () => {
     return students.map((student: IStudent) => {
@@ -125,13 +139,42 @@ export default function EnrollmentViewEdit() {
     });
   }
 
+  const _renderConfirmModal = () => {
+    if (form.getFieldValue('active')) {
+      handleConfirmModalOk();
+    } else {
+      Modal.confirm({
+        icon: <WarningOutlined />,
+        title: 'WARNING, DEACTIVATING ENROLLMENT',
+        content: <>
+        <div>Student: {JSON.parse(form.getFieldValue('student')).name}</div>
+        <div>Course: {JSON.parse(form.getFieldValue('course')).name}</div>
+        <div>Once deactivated, this action cannot be undone.</div>
+        <div>Are you sure to continue?</div>
+        </>,
+        onOk: handleConfirmModalOk,
+      });
+    }
+  }
+
   return (
+    loading ? <ComponentLoading /> :
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
       <section>
-        <Form className='form-create-campaign' form={form} layout='vertical' onFinish={onFinish}>
+        <Form className='form-create-campaign' form={form} layout='vertical'>
           <Card title='Enrollment' className='mb-6'>
+            {
+              action !== CREATE_ACTION && (
+                <Form.Item
+                  label={<Label title='Student' required />}
+                >
+                  <Input disabled value={getStudentDisplay()} />
+                </Form.Item>
+              )
+            }
             <Form.Item
+              hidden={action !== CREATE_ACTION}
               name='student'
               label={<Label title='Student' required />}
               rules={[
@@ -153,7 +196,17 @@ export default function EnrollmentViewEdit() {
                 {_renderStudentOptions()}
               </Select>
             </Form.Item>
+            {
+              action !== CREATE_ACTION && (
+                <Form.Item
+                  label={<Label title='Course' required />}
+                >
+                  <Input disabled value={JSON.parse(form.getFieldValue('course')).name} />
+                </Form.Item>
+              )
+            }
             <Form.Item
+              hidden={action !== CREATE_ACTION}
               name='course'
               label={<Label title='Course' required />}
               rules={[
@@ -187,16 +240,16 @@ export default function EnrollmentViewEdit() {
             >
               <DatePicker format='DD/MM/YYYY' disabled={action === VIEW_ACTION}/>
             </Form.Item>
-            <Form.Item name='sendNotification' valuePropName='checked' label={<Label title='SMS' />}>
-              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            <Form.Item name='sendNotification' valuePropName='checked' initialValue={form.getFieldValue('sendNotification') || true} label={<Label title='SMS' />}>
+              <Switch disabled={action === VIEW_ACTION} checked={form.getFieldValue('sendNotification')} />
             </Form.Item>
-            <Form.Item name='active' valuePropName='checked' label={<Label title='Active' />}>
-              <Switch disabled={action === VIEW_ACTION} defaultChecked />
+            <Form.Item name='active' valuePropName='checked' initialValue={form.getFieldValue('active') || true} label={<Label title='Active' />}>
+              <Switch disabled={action === VIEW_ACTION} checked={form.getFieldValue('active')} />
             </Form.Item>
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit'>
+                  <Button type='primary' htmlType='submit' onClick={_renderConfirmModal}>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

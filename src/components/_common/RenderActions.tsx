@@ -5,14 +5,14 @@ import {
   FormOutlined,
 } from '@ant-design/icons';
 
-const renderActions = (viewLink: string) => {
+const renderActions = (viewLink: string, onlyView = false) => {
   const menu = (
     <Menu style={{width: '200%', textAlign: 'center'}} >
-      <Menu.Item key="edit">
+      {!onlyView && <Menu.Item key="edit">
         <Link to={`${viewLink}/update`} component={Typography.Link} title='Edit'>
           Edit
         </Link>
-      </Menu.Item>
+      </Menu.Item>}
       <Menu.Item key="view">
         <Link to={viewLink} component={Typography.Link} title='View'>
           View
