@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Table, PageHeader, Card, message, Button, Tag } from 'antd';
 import queryString from 'query-string';
-import {
-  EyeOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -15,6 +11,7 @@ import * as misc from '../../utils/Misc';
 import StudentSearch from './StudentSearch';
 import StudentSearchMobile from './StudentSearchMobile';
 import { STORAGE_MOBILE } from '../_common/core/constants';
+import renderActions from '../_common/RenderActions';
 
 export default function StudentList() {
   const [studentList, setStudentList] = useState<IStudent[]>([]);
@@ -55,21 +52,6 @@ export default function StudentList() {
     fetchData(filter);
   }
 
-  const _renderAction = (record: IStudent) => {
-    let element: JSX.Element | null = null;
-    element = (
-      <Space>
-        <Link to={`/student/${record.id}/update`} component={Typography.Link} title='Edit'>
-          <EditOutlined />
-        </Link>
-        <Link to={`/student/${record.id}`} component={Typography.Link} title='View'>
-          <EyeOutlined />
-        </Link>
-      </Space>
-    );
-    return element;
-  };
-
   const _renderExtra = () => {
     return (
       <Button type='primary' onClick={() => {history.push('/student/new')}}>
@@ -108,9 +90,9 @@ export default function StudentList() {
               <Table.Column title='Note' dataIndex='note' />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column
-                title='Action'
+                title=''
                 render={(_value: string, record: IStudent) => {
-                  return _renderAction(record);
+                  return renderActions(`/student/${record.id}`);
                 }}
                 fixed='right'
               />

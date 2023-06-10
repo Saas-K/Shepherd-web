@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Table, PageHeader, Card, message, Button, Tag } from 'antd';
 import queryString from 'query-string';
-import {
-  EyeOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -17,6 +13,7 @@ import { currency } from '../../utils/StringUtils';
 import { formatVNDate } from '../../utils/DateTimeUtils';
 import { STORAGE_MOBILE } from '../_common/core/constants';
 import CourseSearchMobile from './CourseSearchMobile';
+import renderAction from '../_common/RenderActions';
 
 export default function CourseList() {
   const [courseList, setCourseList] = useState<ICourse[]>([]);
@@ -57,21 +54,6 @@ export default function CourseList() {
     fetchData(filter);
   }
 
-  const _renderAction = (record: ICourse) => {
-    let element: JSX.Element | null = null;
-    element = (
-      <Space>
-        <Link to={`/course/${record.id}/update`} component={Typography.Link} title='Edit'>
-          <EditOutlined />
-        </Link>
-        <Link to={`/course/${record.id}`} component={Typography.Link} title='View'>
-          <EyeOutlined />
-        </Link>
-      </Space>
-    );
-    return element;
-  };
-
   const _renderExtra = () => {
     return (
       <Button type='primary' onClick={() => {history.push('/course/new')}}>
@@ -111,9 +93,9 @@ export default function CourseList() {
               <Table.Column title='Classes (per week)' dataIndex='classPerWeek' />
               <Table.Column title='Description' dataIndex='description' />
               <Table.Column
-                title='Action'
+                title=''
                 render={(_value: string, record: ICourse) => {
-                  return _renderAction(record);
+                  return renderAction(`/course/${record.id}`);
                 }}
                 fixed='right'
               />

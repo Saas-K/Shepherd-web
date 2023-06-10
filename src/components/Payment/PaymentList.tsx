@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Space, Typography, Button, Tag } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Table, PageHeader, Card, message, Button, Tag } from 'antd';
 import queryString from 'query-string';
-import {
-  EyeOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -17,6 +13,7 @@ import { currency } from '../../utils/StringUtils';
 import { formatVNDate } from '../../utils/DateTimeUtils';
 import { STORAGE_MOBILE } from '../_common/core/constants';
 import PaymentSearchMobile from './PaymentSearchMobile';
+import renderActions from '../_common/RenderActions';
 
 export default function PaymentList() {
   const [paymentList, setPaymentList] = useState<IPayment[]>([]);
@@ -56,21 +53,6 @@ export default function PaymentList() {
     setLoadingState(true);
     fetchData(filter);
   }
-
-  const _renderAction = (record: IPayment) => {
-    let element: JSX.Element | null = null;
-    element = (
-      <Space>
-        <Link to={`/payment/${record.id}/update`} component={Typography.Link} title='Edit'>
-          <EditOutlined />
-        </Link>
-        <Link to={`/payment/${record.id}`} component={Typography.Link} title='View'>
-          <EyeOutlined />
-        </Link>
-      </Space>
-    );
-    return element;
-  };
 
   const _renderExtra = () => {
     return (
@@ -113,9 +95,9 @@ export default function PaymentList() {
               <Table.Column title='Paid date' dataIndex='paidDate' render={(_date: Date) => formatVNDate(_date)} />
               <Table.Column title='SMS' dataIndex='sendNotification' render={(active: boolean) => active ? <Tag color='success'>Yes</Tag> : <Tag color='error'>No</Tag>} />
               <Table.Column
-                title='Action'
+                title=''
                 render={(_value: string, record: IPayment) => {
-                  return _renderAction(record);
+                  return renderActions(`/payment/${record.id}`);
                 }}
                 fixed='right'
               />
