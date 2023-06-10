@@ -19,7 +19,7 @@ function _setUrl(url: string, params?: any) {
 }
 
 function _handleHeaderMessage(error: any) {
-  throw new Error(error.response.headers.message || 'Something went wrong');
+  throw new Error(error.response.headers.message || 'Something went wrong. Reload page.');
 }
 
 export function client() {
