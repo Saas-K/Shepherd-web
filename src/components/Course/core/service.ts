@@ -2,7 +2,7 @@ import { client } from "../../../services/client";
 import {
   COURSES_GET
 } from '../../../services/apis';
-import { ICourse, ICourseFilter } from "./types";
+import { IColor, ICourse, ICourseFilter } from "./types";
 
 export async function getAllActiveCourses(): Promise<any> {
   return client().get(`${COURSES_GET}`, {page: 0, limit: -1, active: true});
@@ -22,4 +22,8 @@ export async function updateCourse(id: string, body: ICourse): Promise<any> {
 
 export async function createCourse(body: ICourse): Promise<any> {
   return client().post(`${COURSES_GET}`, undefined, body);
+}
+
+export async function getAvailableColors(): Promise<any> {
+  return client().get(`${COURSES_GET}/colors`);
 }

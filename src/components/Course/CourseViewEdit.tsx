@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { PageHeader, Card, Form, Input, Select, Button, message, Row, Col, DatePicker, InputNumber, Switch, Tag, Modal } from 'antd';
 import moment from 'moment';
@@ -6,11 +6,11 @@ import { WarningOutlined } from "@ant-design/icons";
 
 import { CREATE_ACTION, UPDATE_ACTION, VIEW_ACTION } from '../_common/core/constants';
 import * as service from './core/service';
-import { ICourse } from "./core/types";
+import { IColor, ICourse } from "./core/types";
 import Label from "../_common/Label";
 import config from '../../_config';
-import { colorsList } from '../../utils/Colors';
 import { currency } from "../../utils/StringUtils";
+import ComponentLoading from "../_common/ComponentLoading";
 
 export default function CourseViewEdit() {
   const [form] = Form.useForm();
@@ -18,6 +18,9 @@ export default function CourseViewEdit() {
   const { pathname } = useLocation();
   const { id }: any = useParams();
   const pricePerClass = Form.useWatch('pricePerClass', form) || '0';
+  const [colors, setColors] = useState<IColor[]>([]);
+  const [loadingCourse, setLoadingCourse] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -26,10 +29,17 @@ export default function CourseViewEdit() {
 
   useEffect(() => {
     fetchData();
+    fetchColors();
   }, []);
 
   function fetchData() {
-    if (!id) return;
+    setLoadingCourse(true);
+
+    if (!id) {
+      setLoadingCourse(false);
+      return;
+    }
+
     service
     .getCourse(id)
     .then((res: ICourse) => {
@@ -46,6 +56,25 @@ export default function CourseViewEdit() {
     })
     .catch((error) => {
       message.error(error.message);
+    })
+    .finally(() => {
+      setLoadingCourse(false);
+    });
+  }
+
+  function fetchColors() {
+    setLoading(true);
+
+    service
+    .getAvailableColors()
+    .then((res: IColor[]) => {
+      setColors(res);
+    })
+    .catch(error => {
+      message.error(error.message);
+    })
+    .finally(() => {
+      setLoading(false);
     });
   }
 
@@ -98,7 +127,7 @@ export default function CourseViewEdit() {
     }
   }
 
-  return (
+  return (loadingCourse ? <ComponentLoading /> :
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
       <section>
@@ -167,6 +196,7 @@ export default function CourseViewEdit() {
             <Form.Item name='active' valuePropName='checked' initialValue={form.getFieldValue('active') || true} label={<Label title='Active' />}>
               <Switch disabled={action === VIEW_ACTION} checked={form.getFieldValue('active')} />
             </Form.Item>
+            {loading ? <ComponentLoading /> : 
             <Form.Item
               name='color'
               label={<Label title='Color' required />}
@@ -186,11 +216,14 @@ export default function CourseViewEdit() {
                 }
                 disabled={action === VIEW_ACTION}
               >
-                {colorsList.map((color: string) => (
-                  <Select.Option key={color} value={color} label={color}><Tag color={color}>some text</Tag></Select.Option>
+                {colors.map((color: IColor) => (
+                  <Select.Option key={color.id} value={color.value} label={color.value} >
+                    <Tag color={color.value}>{`\u200B\t\u200B\t\u200B\t\u200B ${color.usedBy ? '(used)' : ''}`}</Tag>
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
+            }
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (

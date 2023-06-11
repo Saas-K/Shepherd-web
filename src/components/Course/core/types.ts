@@ -17,3 +17,9 @@ export interface ICourseFilter extends IPageFilter {
   startDateTo?: string,
   description?: string
 }
+
+export interface IColor {
+  id: string,
+  value: string,
+  usedBy?: string;
+}

@@ -38,10 +38,13 @@ export default function EnrollmentViewEdit() {
   }, []);
 
   function fetchData() {
+    setLoading(true);
+
     if (!id) {
       setLoading(false);
       return;
     };
+
     service
     .getEnrollment(id)
     .then((res: IEnrollment) => {
