@@ -21,6 +21,7 @@ export default function PaymentViewEdit() {
   const [enrollments, setEnrollments] = useState<IEnrollment[]>([]);
   const price = Form.useWatch<string>('price', form) || '0';
   const paid = Form.useWatch<string>('paid', form) || '0';
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -73,6 +74,7 @@ export default function PaymentViewEdit() {
 
   const onFinish = async (values: IPayment) => {
     try {
+      setSubmitting(true);
       if (action === CREATE_ACTION && values.enrollment) {
         const body: IPayment = {
           enrollment: JSON.parse(values.enrollment),
@@ -98,6 +100,7 @@ export default function PaymentViewEdit() {
         await service.updatePayment(id, body);
       }
       goBack();
+      setSubmitting(false);
     } catch (error: any) {
       message.error(error.message);
     }
@@ -212,7 +215,7 @@ export default function PaymentViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit'>
+                  <Button disabled={submitting} type='primary' htmlType='submit'>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

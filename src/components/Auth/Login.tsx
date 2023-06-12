@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { message, Button, Form, Input } from 'antd';
 
@@ -8,8 +8,11 @@ import { STORAGE_ACCESS_TOKEN, STORAGE_MOBILE, STORAGE_REFRESH_TOKEN, STORAGE_US
 
 export default function Login() {
   const history = useHistory();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   function loginRequest(body: ILogin) {
+    setSubmitting(true);
+
     service
     .login(body)
     .then((res: ILoginResponse) => {
@@ -22,6 +25,8 @@ export default function Login() {
       message.error(error.message);
     })
     .finally(() => {
+      setSubmitting(false);
+      
       if (localStorage.getItem(STORAGE_ACCESS_TOKEN)) {
         history.push('/course');
         history.go(0);
@@ -64,8 +69,8 @@ export default function Login() {
         <Input.Password />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
+        <Button type="primary" htmlType="submit" disabled={submitting}>
+          {submitting ? 'Logging in...' : 'Login'}
         </Button>
       </Form.Item>
     </Form>

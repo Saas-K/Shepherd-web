@@ -21,6 +21,7 @@ export default function CourseViewEdit() {
   const [colors, setColors] = useState<IColor[]>([]);
   const [loadingCourse, setLoadingCourse] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -93,6 +94,7 @@ export default function CourseViewEdit() {
       color: form.getFieldValue('color')
     };
 
+    setSubmitting(true);
     try {
       if (id) {
         await service.updateCourse(id, body);
@@ -100,6 +102,7 @@ export default function CourseViewEdit() {
         await service.createCourse(body);
       }
       goBack();
+      setSubmitting(false);
     } catch (error: any) {
       message.error(error.message);
     }
@@ -227,7 +230,7 @@ export default function CourseViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit' onClick={_renderConfirmModal}>
+                  <Button disabled={submitting} type='primary' htmlType='submit' onClick={_renderConfirmModal}>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

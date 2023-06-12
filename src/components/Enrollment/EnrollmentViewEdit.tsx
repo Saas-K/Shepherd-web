@@ -25,6 +25,7 @@ export default function EnrollmentViewEdit() {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [students, setStudents] = useState<IStudent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -100,6 +101,7 @@ export default function EnrollmentViewEdit() {
       sendNotification: form.getFieldValue('sendNotification')
     };
   
+    setSubmitting(true);
     try {
       if (id) {
         await service.updateEnrollment(id, body);
@@ -107,6 +109,7 @@ export default function EnrollmentViewEdit() {
         await service.createEnrollment(body);
       }
       goBack();
+      setSubmitting(false);
     } catch (error: any) {
       message.error(error.message);
     }
@@ -252,7 +255,7 @@ export default function EnrollmentViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit' onClick={_renderConfirmModal}>
+                  <Button disabled={submitting} type='primary' htmlType='submit' onClick={_renderConfirmModal}>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

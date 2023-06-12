@@ -42,6 +42,7 @@ export default function ClassCalendar() {
   const [originalClass, setOriginalClass] = useState<IDayClassInfo>();
   const [pendingAlt, setPendingAlt] = useState<IDayClassInfo>();
   const [currenDate, setCurrentDate] = useState<Date>(new Date());
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     const now: Date = new Date();
@@ -162,6 +163,8 @@ export default function ClassCalendar() {
         setCurrentDate(new Date(pendingAlt.date));
       }
 
+      setSubmitting(true);
+
       service.createAltDay(pendingAlt)
       .then((data: any) => {
         setLoading(true);
@@ -189,6 +192,7 @@ export default function ClassCalendar() {
         setPendingAlt(undefined);
         setIsEventEditVisible(false);
         setLoading(false);
+        setSubmitting(false);
       });
     }
   }
@@ -260,6 +264,8 @@ export default function ClassCalendar() {
         setCurrentDate(new Date(selectedClass.date));
       }
 
+      setSubmitting(true);
+
       service.toggleCancelClass({
         mainDayClassId: selectedClass?.mainDayClassDate ? selectedClass.mainDayClassId : _parsedId,
         mainDayClassDate: selectedClass?.mainDayClassDate || selectedClass?.date,
@@ -292,6 +298,7 @@ export default function ClassCalendar() {
         setSelectedClass(undefined);
         setIsEventEditVisible(false);
         setLoading(false);
+        setSubmitting(false);
       });
     }
   }
@@ -382,6 +389,7 @@ export default function ClassCalendar() {
         confirmLoading={loading}
         okText={pendingAlt ? 'Confirm': (selectedClass?.active ? 'Cancel' : 'Undo Cancel')}
         onOk={pendingAlt ? handleAltSubmit : handleToggleCancelSubmit}
+        okButtonProps={{disabled: submitting}}
         cancelText='Exit'
         onCancel={() => {
           setIsEventEditVisible(false); 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { PageHeader, Card, Form, Input, Button, message, Row, Col, Switch } from 'antd';
 
@@ -12,6 +12,7 @@ export default function StudentViewEdit() {
   const history = useHistory();
   const { pathname } = useLocation();
   const { id }: any = useParams();
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   let action = CREATE_ACTION;
   if (id) {
@@ -54,6 +55,7 @@ export default function StudentViewEdit() {
       active: values.active
     };
 
+    setSubmitting(true);
     try {
       if (id) {
         await service.updateStudent(id, body);
@@ -61,6 +63,7 @@ export default function StudentViewEdit() {
         await service.createStudent(body);
       }
       goBack();
+      setSubmitting(false);
     } catch (error: any) {
       message.error(error.message);
     }
@@ -113,7 +116,7 @@ export default function StudentViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button type='primary' htmlType='submit'>
+                  <Button disabled={submitting} type='primary' htmlType='submit'>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

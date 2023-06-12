@@ -26,6 +26,7 @@ export default function ClassSchedule() {
   const [selectedSlot, setSelectedSlot] = useState<IClassSlot>();
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [editMode, setEditMode] = useState<string>(CREATE);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
@@ -127,6 +128,8 @@ export default function ClassSchedule() {
   }
 
   const handleEditSubmit = () => {
+    setSubmitting(true);
+
     service.createMainDay({
       id: selectedSlot?.id || undefined,
       courseId: selectedSlot?.courseId || courses.at(0)?.id,
@@ -157,10 +160,13 @@ export default function ClassSchedule() {
       setSelectedSlot(undefined);
       setIsEventEditVisible(false);
       setLoading(false);
+      setSubmitting(false);
     });
   }
 
   const handleClassInfoChange = (changeInfo: EventChangeArg) => {
+    setSubmitting(true);
+
     const _event: EventApi = changeInfo.event;
     service.createMainDay({
       id: _event?.id || undefined,
@@ -187,10 +193,13 @@ export default function ClassSchedule() {
     .finally(() => {
       setSelectedSlot(undefined);
       setLoading(false);
+      setSubmitting(false);
     });
   }
 
   const handleDelete = () => {
+    setSubmitting(true);
+
     if (selectedSlot?.id) {
       service
       .deleteMainDay(selectedSlot.id)
@@ -212,6 +221,7 @@ export default function ClassSchedule() {
         setSelectedSlot(undefined);
         setIsEventEditVisible(false);
         setLoading(false);
+        setSubmitting(false);
       });
     }
   }
@@ -239,7 +249,7 @@ export default function ClassSchedule() {
           {editMode === UPDATE ? (
             <Collapse>
             <Collapse.Panel header="Advanced" key="1">
-              <Button onClick={handleDelete} danger>Delete</Button>
+              <Button disabled={submitting} onClick={handleDelete} danger>Delete</Button>
             </Collapse.Panel>
           </Collapse>
           ) : undefined}
@@ -290,6 +300,7 @@ export default function ClassSchedule() {
         okText={editMode}
         onCancel={() => {setIsEventEditVisible(false); setSelectedSlot(undefined);}}
         onOk={handleEditSubmit}
+        okButtonProps={{disabled: submitting}}
       >
         {_renderEditInput()}
       </Modal>
