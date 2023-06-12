@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Table, PageHeader, Card, message, Button, Tag } from 'antd';
+import { Table, PageHeader, Card, message, Button, Tag, Alert, Modal } from 'antd';
 import queryString from 'query-string';
+import { WarningOutlined } from '@ant-design/icons';
 
 import * as service from './core/service';
 import ComponentLoading from '../_common/ComponentLoading';
@@ -21,6 +22,7 @@ export default function CourseList() {
   const [loading, setLoadingState] = useState(true);
   const history = useHistory();
   const { pathname, search } = useLocation();
+  const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const query = queryString.parse(search);
 
@@ -38,6 +40,15 @@ export default function CourseList() {
           pageSize: res.pageSize,
           total: res.totalItems
         });
+      
+        if (filter.page === 1) {
+          if (res.list.length !== 0 && res.list[0].classScheduled) {
+            setShowWarning(true);
+            localStorage.setItem('scheduleWarning', 'true');
+          } else {
+            localStorage.setItem('scheduleWarning', 'false');
+          }
+        }
       })
       .catch((error) => {
         message.error(error.message);
@@ -83,10 +94,31 @@ export default function CourseList() {
         <ComponentLoading />
       ) : (
         <section>
+          {
+            localStorage.getItem('scheduleWarningModal') === 'true' &&
+            <Modal title='Incomplete Schedule setup' 
+            open={showWarning} 
+            closable={false} 
+            onOk={() => {
+              localStorage.removeItem('scheduleWarningModal');
+              setShowWarning(false)
+            }} 
+            cancelButtonProps={{ style: { display: 'none' } }}>
+              <p>Please complete Schedule setup for all warning courses!</p>
+            </Modal>
+          }
+          {localStorage.getItem('scheduleWarning') === 'true' && 
+          <Alert message='Incomplete Schedule setup' description='Please complete Schedule setup for all warning courses!' type='error' showIcon icon={<WarningOutlined/>} />}
           <Card>
             <Table 
             scroll={{ scrollToFirstRowOnChange: true, x: 'max-content' }} dataSource={courseList} pagination={{ ...pagination, showSizeChanger: true, onChange: onPageChange }} rowKey='id'>
-              <Table.Column title='Name' dataIndex='name' />
+              <Table.Column title='Name' dataIndex='name' 
+                render={(name: string, record: ICourse) => 
+                  record.classScheduled === 0 ?
+                  name :
+                  <><WarningOutlined style={{color: 'red'}}/><span>{name}</span></>
+                } 
+              />
               <Table.Column title='Start date' dataIndex='startDate' render={(date: Date) => formatVNDate(date)} />
               <Table.Column title='Status' dataIndex='active' render={(active: boolean) => active ? <Tag color='success'>Active</Tag> : <Tag color='error'>Inactive</Tag>} />
               <Table.Column title='Price (per class)' dataIndex='pricePerClass' render={(_price: string) => currency(_price)} />

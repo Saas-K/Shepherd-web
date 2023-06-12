@@ -9,6 +9,7 @@ export interface ICourse {
   classPerWeek: number,
   description?: string,
   color: string,
+  classScheduled?: number
 }
 
 export interface ICourseFilter extends IPageFilter {

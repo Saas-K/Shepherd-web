@@ -25,6 +25,7 @@ export default function Login() {
       if (localStorage.getItem(STORAGE_ACCESS_TOKEN)) {
         history.push('/course');
         history.go(0);
+        localStorage.setItem('scheduleWarningModal', 'true');
       }
     });
   }
