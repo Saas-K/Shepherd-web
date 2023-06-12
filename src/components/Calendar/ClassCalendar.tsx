@@ -377,7 +377,7 @@ export default function ClassCalendar() {
         />
       )}
       <Modal 
-        visible={isEventEditVisible}
+        open={isEventEditVisible}
         width='50%'
         confirmLoading={loading}
         okText={pendingAlt ? 'Confirm': (selectedClass?.active ? 'Cancel' : 'Undo Cancel')}

@@ -284,7 +284,7 @@ export default function ClassSchedule() {
       />
     )}
       <Modal 
-        visible={isEventEditVisible}
+        open={isEventEditVisible}
         width='50%'
         confirmLoading={loading}
         okText={editMode}
