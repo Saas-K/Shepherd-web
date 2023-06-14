@@ -96,7 +96,7 @@ export default function EnrollmentViewEdit() {
     const body: IEnrollment = {
       course: JSON.parse(form.getFieldValue('course')),
       student: JSON.parse(form.getFieldValue('student')),
-      date: form.getFieldValue('date'),
+      date: moment(form.getFieldValue('date')).utcOffset(420).format('yyyy-MM-DD'),
       active: form.getFieldValue('active'),
       sendNotification: form.getFieldValue('sendNotification')
     };

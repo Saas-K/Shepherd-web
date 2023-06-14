@@ -49,7 +49,8 @@ export default function PaymentViewEdit() {
         price: res.price,
         date: moment(res.date),
         unpaid: res.unpaid,
-        paidDate: moment(res.paidDate)
+        paid: res.price! - (res.unpaid || 0),
+        paidDate: res.paidDate ? moment(res.paidDate) : undefined
       });
     })
     .catch((error) => {
@@ -92,8 +93,8 @@ export default function PaymentViewEdit() {
           studentId: values.studentId,
           studentName: values.studentName,
           price: values.price,
-          date: values.date,
-          unpaid: values.unpaid,
+          date: moment(values.date).format(config.API_DATE_FORMAT),
+          paid: values.paid,
           paidDate: moment(values.paidDate).format(config.API_DATE_FORMAT)
         };
   
@@ -112,28 +113,25 @@ export default function PaymentViewEdit() {
   };
 
   const _renderEnrollmentOptions = () => {
-    return enrollments.map((enrollment: IEnrollment) => {
-      return (
+    return enrollments.map((enrollment: IEnrollment) => (
         <Select.Option key={enrollment.id} value={JSON.stringify(enrollment)}>
           {`${enrollment.course.name} ${enrollment.student.name}`}
         </Select.Option>
-      );
-    });
+    ));
   }
 
   return (
     <>
       <PageHeader className='site-page-header' title={getHeader()} onBack={goBack} />
       <section>
-        <Form className='form-create-campaign' form={form} layout='vertical' 
-          onFinish={onFinish}>
+        <Form className='form-create-campaign' form={form} layout='vertical' onFinish={onFinish}>
           <Card title='Enrollment' className='mb-6'>
             <Form.Item hidden={action !== CREATE_ACTION}
               name='enrollment'
               label={<Label title='Enrollment' required />}
               rules={[
                 {
-                  required: true,
+                  required: action === CREATE_ACTION,
                   message: 'Enrollment is required',
                 },
               ]}
@@ -155,7 +153,7 @@ export default function PaymentViewEdit() {
               rules={[
                 {
                   required: action !== CREATE_ACTION,
-                  message: 'Course name date is required',
+                  message: 'Course name is required',
                 },
               ]}
             >
@@ -198,10 +196,10 @@ export default function PaymentViewEdit() {
               <DatePicker format='DD/MM/YYYY' disabled={action !== CREATE_ACTION} />
             </Form.Item>
             <Form.Item
-              name='paymentDate'
-              label={<Label title='Payment date' />}
+              name='paidDate'
+              label={<Label title='Paid date' />}
             >
-              <DatePicker placeholder='Select date' disabled={action === VIEW_ACTION} />
+              <DatePicker format='DD/MM/YYYY' placeholder='Select date' disabled={action === VIEW_ACTION} />
             </Form.Item>
             <Form.Item
               name='paid'
@@ -215,7 +213,7 @@ export default function PaymentViewEdit() {
             <Row>
               <Col span={24} style={{ textAlign: 'right' }}>
                 {action !== VIEW_ACTION && (
-                  <Button disabled={submitting} type='primary' htmlType='submit'>
+                  <Button type='primary' htmlType='submit'>
                     {action === UPDATE_ACTION ? 'Update' : 'Create'}
                   </Button>
                 )}

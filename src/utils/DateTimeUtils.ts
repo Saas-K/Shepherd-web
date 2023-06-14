@@ -153,5 +153,5 @@ export function compareYearMonthStr(date1: string | undefined, date2: string | u
 
 export function formatVNDate(date: any): any {
   if (!date) return undefined;
-  return moment(date).format(VN_DATE_FORMAT);
+  return moment(date).utcOffset(420).format(VN_DATE_FORMAT);
 }

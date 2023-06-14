@@ -13,6 +13,7 @@ export interface IPayment {
   studentName?: string,
   price?: number,
   date?: string,
+  paid?: number, // for form
   unpaid?: number,
   paidDate?: string
 }
